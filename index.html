@@ -650,9 +650,8 @@
     </template>
 
     <!-- ===== WORD BANK (LEVEL) TEMPLATE ===== -->
-    <template id="tpl-words-level">
-        <div class="fade-in-up mx-auto **pb-16 md:pb-0** **pb-16 md:pb-0**">
-            <button onclick="app.navigate('words')" class="mb-4 text-gray-500 hover:accent-text">
+    <template id="tpl-words-list"> <div class="fade-in-up mx-auto pb-16 md:pb-0">
+        <button onclick="app.navigate('words')" class="mb-4 text-gray-500 hover:accent-text">
                 <i class="fas fa-arrow-left me-2"></i> <span data-key="btn_back_levels">Back to All Levels</span>
             </button>
             <h2 id="level-title" class="text-3xl font-bold mb-2">A1 <span data-key="level_beginner">Beginner</span></h2>
@@ -2302,7 +2301,7 @@
         // --- WORD DATA ---
         // ===== PART 1: BEGINNER & ELEMENTARY (approx. 600 words) =====
 
-const wordA1 = [
+const wordav1 = [
     // ===== EVERYDAY (Most Used Words) =====
     { id: "a1_001", tr: "Merhaba", en: "Hello", ar: "مرحباً", cat: "everyday" },
     { id: "a1_002", tr: "Selam", en: "Hi", ar: "سلام", cat: "everyday" },
@@ -4005,7 +4004,7 @@ const wordav2 = [
             { tr: "Yarın toplantı var", en: "There is a meeting tomorrow", ar: "يوجد اجتماع غداً" }
         ];
 
-        const allGameWords = [...wordA1, ...wordav2, ...wordsB1];
+        const allGameWords = [...wordav1, ...wordav2, ...wordsB1];
 
         // --- GRAMMAR DATA (Restored) ---
         const grammarPronouns = [
@@ -4555,8 +4554,9 @@ this.checkDailyReset(); // Check/update streak and daily XP
                         contentNode = this.createStorySubListPage(contentNode, pageId.split('-')[1]);
                     }
                     if (templateId === 'tpl-words-list') { 
-                        contentNode = this.createWordListPage(contentNode, pageId.split('-')[1]);
-                    }
+    // Changed function name below to match definition
+    contentNode = this.createWordLevelPage(contentNode, pageId.split('-')[1]);
+}
                     if (pageId === 'converse-chat') {
                         this.currentConverseScenario = options;
                     }
@@ -4577,6 +4577,7 @@ this.checkDailyReset(); // Check/update streak and daily XP
                     }
                     if (templateId === 'tpl-words-list') {
                         // Use helper if available, or manual split
+                        
                         let level, category;
                         if (this.getParamsFromPageId) {
                              [level, category] = this.getParamsFromPageId(pageId);
@@ -4587,7 +4588,8 @@ this.checkDailyReset(); // Check/update streak and daily XP
                              level = parts[0];
                              category = parts[1];
                         }
-                        this.loadWordList(category || 'all', level);
+                        this.loadWordList(category || 'everyday', level);
+                        this.loadWordList(category || 'airport', level);
                     }
                     // --- END WORD HUB LOGIC ---
                     
@@ -4971,7 +4973,7 @@ this.checkDailyReset(); // Check/update streak and daily XP
             },
             
             getWordData(level) {
-                if (level === 'a1') return wordA1;
+                if (level === 'a1') return wordav1;
                 if (level === 'a2') return wordav2;
                 if (level === 'b1') return wordsB1;
                 if (level === 'b2') return wordsB2;
@@ -5558,14 +5560,14 @@ setWordStatus(wordId, level, status) {
                 let wordList = [];
                 if (wordsForQuiz.length > 5) {
                     // Find the full word objects
-                    wordList = [...wordA1, ...wordav2, ...wordsB1, ...wordsB2, ...wordsC1]
+                    wordList = [...wordav1, ...wordav2, ...wordsB1, ...wordsB2, ...wordsC1]
                                  .filter(w => wordsForQuiz.includes(w.id))
                                  .map(w => ({ tr: w.tr, en: w.en, ar: w.ar }));
                 }
                 if (wordList.length < 5) {
                     // Fallback to level if not enough words
                     wordList = this.getWordData(level).map(w => ({ tr: w.tr, en: w.en, ar: w.ar }));
-                    if(wordList.length === 0) wordList = wordA1.map(w => ({ tr: w.tr, en: w.en, ar: w.ar })); // Absolute fallback
+                    if(wordList.length === 0) wordList = wordav1.map(w => ({ tr: w.tr, en: w.en, ar: w.ar })); // Absolute fallback
                 }
 
                 this.navigate('quiz-custom');
@@ -5894,7 +5896,7 @@ setWordStatus(wordId, level, status) {
                     this.tempGameWords = null; // Clear for next time
                 } else {
                     // Default: Use all words (re-create the full list on the fly to be safe)
-                    sourceList = [...wordA1, ...wordsA2, ...wordsB1, ...wordsB2, ...wordsC1];
+                    sourceList = [...wordav1, ...wordsA2, ...wordsB1, ...wordsB2, ...wordsC1];
                 }
                 // ---------------------------------------
                 
