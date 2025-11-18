@@ -2302,7 +2302,7 @@
         // --- WORD DATA ---
         // ===== PART 1: BEGINNER & ELEMENTARY (approx. 600 words) =====
 
-const wordav1 = [
+const wordA1 = [
     // ===== EVERYDAY (Most Used Words) =====
     { id: "a1_001", tr: "Merhaba", en: "Hello", ar: "مرحباً", cat: "everyday" },
     { id: "a1_002", tr: "Selam", en: "Hi", ar: "سلام", cat: "everyday" },
@@ -4005,7 +4005,7 @@ const wordav2 = [
             { tr: "Yarın toplantı var", en: "There is a meeting tomorrow", ar: "يوجد اجتماع غداً" }
         ];
 
-        const allGameWords = [...wordav1, ...wordav2, ...wordsB1];
+        const allGameWords = [...wordA1, ...wordav2, ...wordsB1];
 
         // --- GRAMMAR DATA (Restored) ---
         const grammarPronouns = [
@@ -4971,7 +4971,7 @@ this.checkDailyReset(); // Check/update streak and daily XP
             },
             
             getWordData(level) {
-                if (level === 'a1') return wordav1;
+                if (level === 'a1') return wordA1;
                 if (level === 'a2') return wordav2;
                 if (level === 'b1') return wordsB1;
                 if (level === 'b2') return wordsB2;
@@ -5558,14 +5558,14 @@ setWordStatus(wordId, level, status) {
                 let wordList = [];
                 if (wordsForQuiz.length > 5) {
                     // Find the full word objects
-                    wordList = [...wordav1, ...wordav2, ...wordsB1, ...wordsB2, ...wordsC1]
+                    wordList = [...wordA1, ...wordav2, ...wordsB1, ...wordsB2, ...wordsC1]
                                  .filter(w => wordsForQuiz.includes(w.id))
                                  .map(w => ({ tr: w.tr, en: w.en, ar: w.ar }));
                 }
                 if (wordList.length < 5) {
                     // Fallback to level if not enough words
                     wordList = this.getWordData(level).map(w => ({ tr: w.tr, en: w.en, ar: w.ar }));
-                    if(wordList.length === 0) wordList = wordav1.map(w => ({ tr: w.tr, en: w.en, ar: w.ar })); // Absolute fallback
+                    if(wordList.length === 0) wordList = wordA1.map(w => ({ tr: w.tr, en: w.en, ar: w.ar })); // Absolute fallback
                 }
 
                 this.navigate('quiz-custom');
@@ -5894,7 +5894,7 @@ setWordStatus(wordId, level, status) {
                     this.tempGameWords = null; // Clear for next time
                 } else {
                     // Default: Use all words (re-create the full list on the fly to be safe)
-                    sourceList = [...wordav1, ...wordsA2, ...wordsB1, ...wordsB2, ...wordsC1];
+                    sourceList = [...wordA1, ...wordsA2, ...wordsB1, ...wordsB2, ...wordsC1];
                 }
                 // ---------------------------------------
                 
