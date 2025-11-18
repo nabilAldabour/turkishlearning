@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TürkçeÖğren - AI Language App (v14)</title>
+    <link rel="shortcut icon" href="#">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -150,6 +151,127 @@
         body.dark #game-fall-canvas {
             background: linear-gradient(to bottom, #0f172a 0%, #334155 100%);
         }
+        /* --- NEW: Alive Game Animations --- */
+
+/* 1. Bouncy Entry Animation */
+@keyframes popIn {
+    0% { opacity: 0; transform: scale(0.5) translateY(20px); }
+    70% { transform: scale(1.1) translateY(-5px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* 2. Success Pulse (Green Pop) */
+@keyframes matchSuccess {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.15); background-color: #22c55e; border-color: #22c55e; box-shadow: 0 0 15px rgba(34, 197, 94, 0.5); }
+    100% { transform: scale(0.95); opacity: 0.6; background-color: #22c55e; color: white; }
+}
+
+/* 3. Error Shake (Red Shake) */
+@keyframes shakeError {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-8px) rotate(-5deg); }
+    40% { transform: translateX(8px) rotate(5deg); }
+    60% { transform: translateX(-4px); }
+    80% { transform: translateX(4px); }
+}
+
+/* Apply animations */
+.game-card {
+    /* Bouncy entry for all cards */
+    animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards;
+}
+
+/* Success State */
+.game-card.matched .game-card-back {
+    animation: matchSuccess 0.6s ease-out forwards !important;
+    /* Force styles to stick */
+    background-color: #22c55e !important; 
+    color: white !important;
+    border-color: #16a34a !important;
+}
+
+/* Error State */
+.game-card.mismatch .game-card-inner {
+    animation: shakeError 0.5s ease-in-out;
+}
+
+/* Hover State (Lift up) */
+.game-card:not(.flipped):not(.matched):hover .game-card-inner {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+/* Smooth transition for hover */
+.game-card-inner {
+    transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1), box-shadow 0.3s ease;
+}
+/* --- VIBRANT CARD STYLES --- */
+
+/* Make the cover (front) colorful */
+.game-card-front {
+    /* Default Gradient (Blue-Purple) */
+    background: linear-gradient(135deg, #4f46e5 0%, #8b5cf6 100%);
+    border: 2px solid rgba(255,255,255,0.2);
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.1);
+}
+
+/* Alternating colors for variety using nth-child */
+.game-card:nth-child(3n+1) .game-card-front {
+    background: linear-gradient(135deg, #0ea5e9 0%, #3b82f6 100%); /* Sky Blue */
+}
+.game-card:nth-child(3n+2) .game-card-front {
+    background: linear-gradient(135deg, #ec4899 0%, #d946ef 100%); /* Pink */
+}
+.game-card:nth-child(3n+3) .game-card-front {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%); /* Emerald */
+}
+
+/* Make the text side (back) cleaner */
+.game-card-back {
+    background-color: #ffffff;
+    color: #1e293b;
+    border: 3px solid #e2e8f0;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+/* Dark mode support for text side */
+body.dark .game-card-back {
+    background-color: #1e293b;
+    color: #f1f5f9;
+    border-color: #334155;
+}
+
+/* Matched state stays Green */
+.game-card.matched .game-card-back {
+    background-color: #22c55e !important; 
+    color: white !important;
+    border-color: #16a34a !important;
+    box-shadow: 0 0 15px #22c55e;
+}
+
+/* Mismatch state turns Red */
+.game-card.mismatch .game-card-back {
+    background-color: #ef4444 !important;
+    color: white !important;
+    border-color: #dc2626 !important;
+}
+/* New CSS to make the canvas flash on hit/miss */
+#game-fall-canvas {
+    transition: box-shadow 0.1s ease-out, border-color 0.1s ease-out;
+    border: 2px solid transparent; /* Ensure border space exists */
+}
+.flash-green {
+    box-shadow: 0 0 10px 5px #22c55e; /* Green glow for correct */
+    border-color: #22c55e !important;
+}
+.flash-red-miss { /* Renamed from 'flash-red' to avoid conflicts */
+    box-shadow: 0 0 10px 5px #ef4444; /* Red glow for missed/wrong */
+    border-color: #ef4444 !important;
+}
 
     </style>
 </head>
@@ -1254,6 +1376,7 @@
                 // ... (abbreviated) ...
                 nav_dashboard: "Panel", nav_lessons: "Dersler", nav_words: "Kelime Bankası", nav_snap: "Çek & Öğren",
                 nav_converse: "Yapay Zeka Sohbet", nav_tutor: "Yapay Zeka Eğitmen", nav_challenges: "Meydan Okumalar",
+                
             },
             'ar': {
                 // ... (abbreviated) ...
@@ -3998,11 +4121,16 @@ const wordav2 = [
 
         // --- SENTENCE GAME DATA ---
         const gameSentences = [
-            { tr: "Bu bir kedi", en: "This is a cat", ar: "هذه قطة" },
-            { tr: "Su istiyorum", en: "I want water", ar: "أريد ماء" },
-            { tr: "Okul bugün kapalı", en: "School is closed today", ar: "المدرسة مغلقة اليوم" },
-            { tr: "Yarın toplantı var", en: "There is a meeting tomorrow", ar: "يوجد اجتماع غداً" }
-        ];
+    // Manual basics
+    { tr: "Bu bir kedi", en: "This is a cat", ar: "هذه قطة" },
+    { tr: "Su istiyorum", en: "I want water", ar: "أريد ماء" },
+    // Merge existing lists
+    ...sentenceav1,
+    ...sentenceav2,
+    ...sentencesB1,
+    ...sentencesB2,
+    ...sentencesC1
+];
 
         const allGameWords = [...wordav1, ...wordav2, ...wordsB1];
 
@@ -4442,7 +4570,9 @@ const wordav2 = [
 
 
         // --- GEMINI API ---
-        const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=`;
+        // Use this stable version
+// This causes a 404 because the model doesn't exist
+const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=`;
         const API_KEY = "AIzaSyBsqtRTdpFcQqOLgroG3pnpRQH4kYlBhwg";
         
         // --- APP LOGIC ---
@@ -4589,7 +4719,6 @@ this.checkDailyReset(); // Check/update streak and daily XP
                              category = parts[1];
                         }
                         this.loadWordList(category || 'everyday', level);
-                        this.loadWordList(category || 'airport', level);
                     }
                     // --- END WORD HUB LOGIC ---
                     
@@ -5218,13 +5347,11 @@ checkDailyReset() {
     const list = document.getElementById('word-list');
     if (!list) return;
 
-    // --- TAB BUILDING (This is the correct place) ---
-    // This code now runs *after* the page loads, which fixes the lag.
+    // --- TAB BUILDING (Ensure tabs are built correctly for the level) ---
     const tabsContainer = document.getElementById('word-tabs');
     if (tabsContainer) { 
         tabsContainer.innerHTML = `<button onclick="app.loadWordList('all', '${level}')" data-tab="all" class="word-tab-btn flex-1 whitespace-nowrap p-2 px-4 rounded-full font-semibold" data-key="tab_all">All</button>`;
 
-        // This builds your category tabs (Nouns, Verbs, etc.)
         const categories = [...new Set(wordData.map(w => w.cat))];
         categories.forEach(cat => {
             const catKey = `tab_${cat}`;
@@ -5232,54 +5359,49 @@ checkDailyReset() {
             tabsContainer.innerHTML += `<button onclick="app.loadWordList('${cat}', '${level}')" data-tab="${cat}" class="word-tab-btn flex-1 whitespace-nowrap p-2 px-4 rounded-full font-semibold" data-key="${catKey}">${catName}</button>`;
         });
 
-        // This adds the "Sentences" tab
         tabsContainer.innerHTML += `<button onclick="app.loadWordList('sentences', '${level}')" data-tab="sentences" class="word-tab-btn flex-1 whitespace-nowrap p-2 px-4 rounded-full font-semibold" data-key="tab_sentences">Sentences</button>`;
     }
     // --- END OF TAB BUILDING ---
 
-    // Filter the list by category
+    // --- NEW ROBUST FILTERING ---
     let filtered = [];
-    let isSentenceMode = (category === 'sentences');
-
+    const isSentenceMode = (category === 'sentences');
+    
     if (isSentenceMode) {
         filtered = sentenceData;
+    } else if (category === 'all') {
+        filtered = wordData;
     } else {
-        // This is the line you wanted: load 'everyday' by default
-        if (category === '') category = 'everyday'; 
-        filtered = (category === 'all') ? wordData : wordData.filter(w => w.cat === category);
+        // This is where 'everyday' and 'airport' categories are filtered
+        filtered = wordData.filter(w => w.cat === category);
     }
+    // --- END FILTERING ---
 
     list.innerHTML = "";
 
-    // Render the list
+    // Render the list (the following render logic remains nearly identical to yours)
     if (filtered.length === 0) {
         list.className = "space-y-4 col-span-3";
-        if (category === '') {
-            list.innerHTML = `<p class="text-gray-500 text-center col-span-3">Please select a category above to begin.</p>`;
-        } else {
-            list.innerHTML = `<p class="text-gray-500 text-center col-span-3">No words found for this category.</p>`;
-        }
+        list.innerHTML = `<p class="text-gray-500 text-center col-span-3">No words found for this category.</p>`;
     } else if (isSentenceMode) {
-                list.className = "space-y-4";
-                filtered.forEach(s => {
-                    const trans = s[this.language] || s['en'];
-                    // Use replace() to fix errors with sentences that have ' in them
-                    const safeSentence = s.tr.replace(/'/g, "\\'"); 
+        list.className = "space-y-4";
+        filtered.forEach(s => {
+            const trans = s[this.language] || s['en'];
+            const safeSentence = s.tr.replace(/'/g, "\\'"); 
 
-                    list.innerHTML += `
-                        <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-lg flex justify-between items-center">
-                            <div>
-                                <p class="text-lg font-bold text-gray-800 dark:text-white">${s.tr}</p>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">${trans} <span class="${this.showArabic ? 'font-arabic' : 'hidden'}"> / ${s.ar}</span></p>
-                            </div>
-                            <button onclick="app.speak('${safeSentence}', 'tr-TR')" class="p-2 text-blue-500 dark:text-blue-400 hover:accent-text transition rounded-full flex-shrink-0 ml-4">
-                                <i class="fas fa-volume-up text-xl"></i>
-                            </button>
-                        </div>
-                    `;
-                });
+            list.innerHTML += `
+                <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl shadow-lg flex justify-between items-center">
+                    <div>
+                        <p class="text-lg font-bold text-gray-800 dark:text-white">${s.tr}</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">${trans} <span class="${this.showArabic ? 'font-arabic' : 'hidden'}"> / ${s.ar}</span></p>
+                    </div>
+                    <button onclick="app.speak('${safeSentence}', 'tr-TR')" class="p-2 text-blue-500 dark:text-blue-400 hover:accent-text transition rounded-full flex-shrink-0 ml-4">
+                        <i class="fas fa-volume-up text-xl"></i>
+                    </button>
+                </div>
+            `;
+        });
     } else {
-        // This is the code that renders your word cards
         list.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5";
         filtered.forEach(word => {
             const trans = word[this.language] || word['en'];
@@ -5324,11 +5446,10 @@ checkDailyReset() {
 
     // Update active tab styling
     document.querySelectorAll('.word-tab-btn').forEach(btn => {
-        btn.classList.toggle('accent-bg', btn.dataset.tab === category && category !== '');
-        btn.classList.toggle('text-white', btn.dataset.tab === category && category !== '');
+        btn.classList.toggle('accent-bg', btn.dataset.tab === category);
+        btn.classList.toggle('text-white', btn.dataset.tab === category);
     });
-},
-
+}, 
 setWordStatus(wordId, level, status) {
     if (this.wordStatus[wordId] === status) {
         delete this.wordStatus[wordId]; // Fixed typo
@@ -5551,29 +5672,42 @@ setWordStatus(wordId, level, status) {
             
             // --- AI QUIZ LOGIC (v2.0) ---
             async startCustomQuiz() {
-                const level = document.getElementById('quiz-level').value;
-                const difficulty = document.getElementById('quiz-difficulty').value; // easy, hard, mastered
-                const mode = document.getElementById('quiz-mode').value;
-                
-                // Get words based on difficulty
-                const wordsForQuiz = Object.keys(this.wordStatus).filter(id => this.wordStatus[id] === difficulty);
-                let wordList = [];
-                if (wordsForQuiz.length > 5) {
-                    // Find the full word objects
-                    wordList = [...wordav1, ...wordav2, ...wordsB1, ...wordsB2, ...wordsC1]
-                                 .filter(w => wordsForQuiz.includes(w.id))
-                                 .map(w => ({ tr: w.tr, en: w.en, ar: w.ar }));
-                }
-                if (wordList.length < 5) {
-                    // Fallback to level if not enough words
-                    wordList = this.getWordData(level).map(w => ({ tr: w.tr, en: w.en, ar: w.ar }));
-                    if(wordList.length === 0) wordList = wordav1.map(w => ({ tr: w.tr, en: w.en, ar: w.ar })); // Absolute fallback
-                }
+    // 1. Get values
+    const levelRaw = document.getElementById('quiz-level').value;
+    const level = levelRaw.toLowerCase(); // FIX: Force lowercase ('A1' -> 'a1')
+    const difficulty = document.getElementById('quiz-difficulty').value; 
+    const mode = document.getElementById('quiz-mode').value;
+    
+    // 2. Try to load words based on "Difficulty" (Easy/Hard/Mastered) first
+    const wordsForQuiz = Object.keys(this.wordStatus).filter(id => this.wordStatus[id] === difficulty);
+    let wordList = [];
 
-                this.navigate('quiz-custom');
-                this.currentQuizSettings = { level, difficulty, mode, wordList };
-                this.initQuiz('quiz-custom');
-            },
+    if (wordsForQuiz.length > 5) {
+        // Combine all dictionaries to find the specific words marked as "Hard" etc.
+        const allWords = [...wordav1, ...wordav2, ...wordsB1, ...wordsB2, ...wordsC1];
+        wordList = allWords
+                     .filter(w => wordsForQuiz.includes(w.id))
+                     .map(w => ({ tr: w.tr, en: w.en, ar: w.ar }));
+    }
+
+    // 3. Fallback: If not enough difficulty words, use the selected LEVEL
+    if (wordList.length < 5) {
+        // getWordData now receives 'a1', 'a2' etc correctly
+        const data = this.getWordData(level); 
+        
+        if (data && data.length > 0) {
+            wordList = data.map(w => ({ tr: w.tr, en: w.en, ar: w.ar }));
+        } else {
+            // Absolute safety fallback (should rarely happen now)
+            wordList = wordav1.map(w => ({ tr: w.tr, en: w.en, ar: w.ar })); 
+        }
+    }
+
+    // 4. Start Quiz
+    this.navigate('quiz-custom');
+    this.currentQuizSettings = { level, difficulty, mode, wordList };
+    this.initQuiz('quiz-custom');
+},
             async initQuiz(pageId) {
                 const loadingEl = document.getElementById('quiz-loading');
                 const questionEl = document.getElementById('quiz-question-container');
@@ -5629,10 +5763,17 @@ setWordStatus(wordId, level, status) {
                     
                     if (!questions || !Array.isArray(questions) || questions.length === 0) throw new Error("AI returned invalid quiz.");
 
-                    this.currentQuiz.questions = questions;
-                    loadingEl.classList.add('hidden');
-                    questionEl.classList.remove('hidden');
-                    this.renderQuizQuestion();
+                    // Corrected Order: RENDER -> HIDE LOADER -> SHOW
+this.currentQuiz.questions = questions;
+
+// 1. Render the new question data into the DOM elements (while they are hidden)
+this.renderQuizQuestion(); 
+
+// 2. Hide the loader
+loadingEl.classList.add('hidden');
+
+// 3. Show the question container (now populated with correct, current data)
+questionEl.classList.remove('hidden');
 
                 } catch (e) {
                     console.error(e);
@@ -5884,77 +6025,97 @@ setWordStatus(wordId, level, status) {
             
             // --- MINI-GAME LOGIC ---
             initGameMatch() {
-                const board = document.getElementById('game-match-board');
-                if (!board) return;
-                board.innerHTML = "";
-                this.game = { cards: [], flippedCards: [], moves: 0, matches: 0 };
-                
-                // --- MODIFIED: Check for custom list ---
-                let sourceList = [];
-                if (this.tempGameWords && this.tempGameWords.length > 0) {
-                    sourceList = this.tempGameWords; // Use lesson words
-                    this.tempGameWords = null; // Clear for next time
-                } else {
-                    // Default: Use all words (re-create the full list on the fly to be safe)
-                    sourceList = [...wordav1, ...wordsA2, ...wordsB1, ...wordsB2, ...wordsC1];
-                }
-                // ---------------------------------------
-                
-                let words = sourceList.filter(w => w.tr && (w.en || w[this.language])) // Ensure valid
-                                      .sort(() => 0.5 - Math.random())
-                                      .slice(0, 6);
-                
-                let pairs = [];
-                words.forEach((word, i) => {
-                    pairs.push({ id: `word-${i}`, text: word.tr, lang: 'tr' });
-                    pairs.push({ id: `word-${i}`, text: word[this.language] || word.en, lang: this.language });
-                });
-                
-                this.game.cards = pairs.sort(() => 0.5 - Math.random());
-                
-                this.game.cards.forEach((card, index) => {
-                    board.innerHTML += `
-                        <div class="game-card h-28 cursor-pointer" onclick="app.flipGameCard(this, ${index})">
-                            <div class="game-card-inner relative w-full h-full">
-                                <div class="game-card-front flex items-center justify-center rounded-xl">
-                                    <i class="fas fa-feather-alt text-4xl text-white opacity-50"></i>
-                                </div>
-                                <div class="game-card-back bg-white dark:bg-slate-700 p-2 flex items-center justify-center text-center font-bold text-sm sm:text-lg rounded-xl border-2 border-indigo-100 dark:border-slate-600 text-gray-800 dark:text-white">
-                                    ${card.text}
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                });
-            },
+    const board = document.getElementById('game-match-board');
+    if (!board) return;
+    board.innerHTML = "";
+    this.game = { cards: [], flippedCards: [], moves: 0, matches: 0 };
+    
+    // --- Source List Logic ---
+    let sourceList = [];
+    if (this.tempGameWords && this.tempGameWords.length > 0) {
+        sourceList = this.tempGameWords;
+        this.tempGameWords = null;
+    } else {
+        sourceList = [...wordav1, ...wordsA2, ...wordsB1, ...wordsB2, ...wordsC1];
+    }
+    
+    let words = sourceList.filter(w => w.tr && (w.en || w[this.language]))
+                          .sort(() => 0.5 - Math.random())
+                          .slice(0, 6);
+    
+    let pairs = [];
+    words.forEach((word, i) => {
+        pairs.push({ id: `word-${i}`, text: word.tr, lang: 'tr' });
+        pairs.push({ id: `word-${i}`, text: word[this.language] || word.en, lang: this.language });
+    });
+    
+    this.game.cards = pairs.sort(() => 0.5 - Math.random());
+    
+    this.game.cards.forEach((card, index) => {
+        // NEW: Added animation-delay for the "pop-in" effect
+        board.innerHTML += `
+            <div class="game-card h-28 cursor-pointer" style="animation-delay: ${index * 100}ms" onclick="app.flipGameCard(this, ${index})">
+                <div class="game-card-inner relative w-full h-full">
+                    <div class="game-card-front flex items-center justify-center rounded-xl shadow-md">
+                        <i class="fas fa-feather-alt text-4xl text-white opacity-50"></i>
+                    </div>
+                    <div class="game-card-back bg-white dark:bg-slate-700 p-2 flex items-center justify-center text-center font-bold text-sm sm:text-lg rounded-xl border-2 border-indigo-100 dark:border-slate-600 text-gray-800 dark:text-white shadow-md">
+                        ${card.text}
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+},
             flipGameCard(cardEl, index) {
-                if (this.game.flippedCards.length === 2 || cardEl.classList.contains('flipped')) return;
+    if (this.game.flippedCards.length === 2 || cardEl.classList.contains('flipped') || cardEl.classList.contains('matched')) return;
 
-                cardEl.classList.add('flipped');
-                this.game.flippedCards.push({ el: cardEl, card: this.game.cards[index], index });
-                
-                if (this.game.flippedCards.length === 2) {
-                    this.game.moves++;
-                    setTimeout(() => this.checkGameMatch(), 1000);
-                }
-            },
+    // NEW: Play a paper flip sound
+    this.playSound('flip');
+
+    cardEl.classList.add('flipped');
+    this.game.flippedCards.push({ el: cardEl, card: this.game.cards[index], index });
+    
+    if (this.game.flippedCards.length === 2) {
+        this.game.moves++;
+        // Wait slightly less time so the user doesn't get bored
+        setTimeout(() => this.checkGameMatch(), 800);
+    }
+},
             checkGameMatch() {
-                const c1 = this.game.flippedCards[0];
-                const c2 = this.game.flippedCards[1];
+    const c1 = this.game.flippedCards[0];
+    const c2 = this.game.flippedCards[1];
 
-                if (c1.card.id === c2.card.id) {
-                    this.game.matches++;
-                    c1.el.classList.add('matched');
-                    c2.el.classList.add('matched');
-                    this.playSound('correct'); // Sound!
-                    if (this.game.matches === 6) this.winGame('match');
-                } else {
-                    c1.el.classList.remove('flipped');
-                    c2.el.classList.remove('flipped');
-                    this.playSound('wrong'); // Sound!
-                }
-                this.game.flippedCards = [];
-            },
+    if (c1.card.id === c2.card.id) {
+        // === MATCH (Success) ===
+        this.game.matches++;
+        c1.el.classList.add('matched');
+        c2.el.classList.add('matched');
+        this.playSound('correct');
+        
+        // Optional: Make them fade out slightly after 1 second so you know they are done
+        setTimeout(() => {
+            c1.el.style.opacity = "0.5";
+            c2.el.style.opacity = "0.5";
+        }, 1000);
+        
+        if (this.game.matches === 6) this.winGame('match');
+    } else {
+        // === MISMATCH (Error) ===
+        // 1. Turn them red immediately
+        c1.el.classList.add('mismatch');
+        c2.el.classList.add('mismatch');
+        this.playSound('wrong');
+        
+        // 2. WAIT 1.5 SECONDS (1500ms) so you can read the words
+        setTimeout(() => {
+            c1.el.classList.remove('flipped', 'mismatch');
+            c2.el.classList.remove('flipped', 'mismatch');
+        }, 1500); // <--- CHANGED FROM 500 to 1500
+    }
+    // Clear the array immediately so the user can't click more cards while waiting
+    this.game.flippedCards = [];
+},
             winGame(gameType, score=0) {
                 this.playSound('win'); // Victory Sound!
                 let xp = 0;
@@ -6003,25 +6164,43 @@ setWordStatus(wordId, level, status) {
                 }
             },
             initGameHangman() {
-                this.hangman = {
-                    word: allGameWords[Math.floor(Math.random() * allGameWords.length)],
-                    guesses: 6,
-                    correct: [],
-                    wrong: []
-                };
-                
-                this.hangman.word.tr = this.hangman.word.tr.toUpperCase();
-                
-                document.getElementById('hangman-hint').innerText = `Hint: ${this.hangman.word[this.language] || this.hangman.word['en']}`;
-                document.getElementById('hangman-guesses').innerText = this.hangman.guesses;
-                
-                for (let i = 1; i <= 6; i++) {
-                    document.getElementById(`hangman-part-${i}`).classList.add('hidden');
-                }
+    // 1. Initialize Game State
+    this.hangman = {
+        word: allGameWords[Math.floor(Math.random() * allGameWords.length)],
+        guesses: 6,
+        correct: [],
+        wrong: []
+    };
+    
+    // Safety: Ensure a word was actually found
+    if (!this.hangman.word) {
+        console.error("Hangman Error: No words found to play with.");
+        return;
+    }
+    
+    this.hangman.word.tr = this.hangman.word.tr.toUpperCase();
+    
+    // 2. Update UI (With Safety Checks)
+    const hintEl = document.getElementById('hangman-hint');
+    if (hintEl) {
+        hintEl.innerText = `Hint: ${this.hangman.word[this.language] || this.hangman.word['en']}`;
+    }
+    
+    const guessesEl = document.getElementById('hangman-guesses');
+    if (guessesEl) {
+        guessesEl.innerText = this.hangman.guesses;
+    }
+    
+    // 3. Reset the Gallows Drawing
+    for (let i = 1; i <= 6; i++) {
+        const part = document.getElementById(`hangman-part-${i}`);
+        if (part) part.classList.add('hidden');
+    }
 
-                this.renderHangmanWord();
-                this.renderHangmanKeyboard();
-            },
+    // 4. Render the rest
+    this.renderHangmanWord();
+    this.renderHangmanKeyboard();
+},
             renderHangmanWord() {
                 const wordEl = document.getElementById('hangman-word');
                 if (!wordEl) return;
@@ -6049,19 +6228,29 @@ setWordStatus(wordId, level, status) {
                 });
             },
             guessHangmanLetter(letter) {
-                if (this.hangman.word.tr.includes(letter)) {
-                    this.hangman.correct.push(letter);
-                } else {
-                    this.hangman.wrong.push(letter);
-                    this.hangman.guesses--;
-                    document.getElementById('hangman-guesses').innerText = this.hangman.guesses;
-                    document.getElementById(`hangman-part-${6 - this.hangman.guesses}`).classList.remove('hidden');
-                }
-                
-                this.renderHangmanWord();
-                this.renderHangmanKeyboard();
-                this.checkHangmanWin();
-            },
+    if (this.hangman.word.tr.includes(letter)) {
+        this.hangman.correct.push(letter);
+    } else {
+        this.hangman.wrong.push(letter);
+        this.hangman.guesses--;
+        
+        // --- FIX IS HERE ---
+        const guessesEl = document.getElementById('hangman-guesses');
+        if (guessesEl) { // Ensure the element exists before trying to set innerText
+            guessesEl.innerText = this.hangman.guesses;
+        }
+        
+        const partEl = document.getElementById(`hangman-part-${6 - this.hangman.guesses}`);
+        if (partEl) { // Added safety check for the hangman drawing parts too
+            partEl.classList.remove('hidden');
+        }
+        // --- END FIX ---
+    }
+    
+    this.renderHangmanWord();
+    this.renderHangmanKeyboard();
+    this.checkHangmanWin();
+},
             checkHangmanWin() {
                 const wordLetters = [...new Set(this.hangman.word.tr.split(''))];
                 const won = wordLetters.every(l => this.hangman.correct.includes(l));
@@ -6137,86 +6326,136 @@ setWordStatus(wordId, level, status) {
             },
             
             // --- NEW: WORD FALL GAME LOGIC ---
-            initGameFall() {
-                this.fall.canvas = document.getElementById('game-fall-canvas');
-                if (!this.fall.canvas) return;
-                this.fall.ctx = this.fall.canvas.getContext('2d');
-                this.fall.score = 0;
-                this.fall.lives = 3;
-                this.fall.words = [];
-                this.fall.gameLoop = setInterval(this.runGameFall.bind(this), 1000 / 60); // 60 FPS
-                
-                const fallInput = document.getElementById('fall-input');
-                fallInput.value = "";
-                fallInput.focus();
-                fallInput.onkeyup = (e) => {
-                    if (e.key === 'Enter') this.checkGameFall(e.target.value, e.target);
-                };
-                
-                this.spawnFallWord();
-            },
-            spawnFallWord() {
-                const word = allGameWords[Math.floor(Math.random() * allGameWords.length)];
-                this.fall.words.push({
-                    tr: word.tr,
-                    answer: word[this.language] || word.en,
-                    x: Math.random() * (this.fall.canvas.width - 100) + 50,
-                    y: 0,
-                    speed: 0.5 + Math.random() * 0.5
-                });
-            },
+            // Replace the entire initGameFall function
+// Replace the entire initGameFall function
+initGameFall() {
+    this.fall.canvas = document.getElementById('game-fall-canvas');
+    if (!this.fall.canvas) return;
+    this.fall.ctx = this.fall.canvas.getContext('2d');
+    this.fall.score = 0;
+    this.fall.lives = 3; 
+    this.fall.words = [];
+    
+    this.updateFallStats();
+
+    if (this.fall.gameLoop) clearInterval(this.fall.gameLoop);
+    this.fall.gameLoop = setInterval(this.runGameFall.bind(this), 1000 / 60);
+    
+    const fallInput = document.getElementById('fall-input');
+    fallInput.value = "";
+    fallInput.focus();
+    
+    fallInput.onkeyup = null; // Clear old handlers
+    fallInput.onkeyup = (e) => {
+        if (e.key === 'Enter') {
+            // FIX: Explicitly call on the global 'app' object
+            // This is the line generating the error (or the missing function is the issue)
+            app.checkGameFall(e.target.value, e.target); 
+        }
+    };
+    
+    this.spawnFallWord();
+},
+// Add or replace this function inside the 'app' object
+checkGameFall(answer, input) {
+    if (!answer) return;
+    let found = false;
+    for (let i = this.fall.words.length - 1; i >= 0; i--) {
+        if (this.fall.words[i].answer.toLowerCase() === answer.toLowerCase()) {
+            this.fall.words.splice(i, 1);
+            this.fall.score++;
+            found = true;
+            break;
+        }
+    }
+    if (found) {
+        input.value = "";
+        this.spawnFallWord(); // Add another
+        this.playSound('correct');
+    } else {
+        input.classList.add('animate-shake');
+        this.playSound('wrong');
+        setTimeout(() => input.classList.remove('animate-shake'), 500);
+    }
+    this.updateFallStats();
+},
+           spawnFallWord() {
+    const word = allGameWords[Math.floor(Math.random() * allGameWords.length)];
+    
+    // Calculate position to keep word inside the canvas
+    this.fall.ctx.font = 'bold 20px Lexend';
+    const textWidth = this.fall.ctx.measureText(word.tr).width;
+    const boxWidth = textWidth + 40; // Width of the chip
+    const maxX = this.fall.canvas.width - boxWidth;
+    
+    this.fall.words.push({
+        tr: word.tr,
+        answer: word[this.language] || word.en,
+        x: Math.random() * maxX, // Random X position within bounds
+        y: -40, // Start above the screen
+        // SPEED: Changed from 0.5+ to 0.2+ (Much Slower)
+        speed: 0.2 + Math.random() * 0.25, 
+        // COLOR: Random pastel colors for the chip background
+        color: `hsl(${Math.random() * 360}, 70%, 85%)` 
+    });
+},
             runGameFall() {
-                if (!this.fall.gameLoop) return;
-                
-                const ctx = this.fall.ctx;
-                const canvas = this.fall.canvas;
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (!this.fall.gameLoop) return;
+    
+    const ctx = this.fall.ctx;
+    const canvas = this.fall.canvas;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-                // Spawn new word?
-                if (Math.random() < 0.01) this.spawnFallWord();
-                
-                // Draw words
-                ctx.fillStyle = document.documentElement.classList.contains('dark') ? 'white' : '#0f172a';
-                ctx.font = '20px Lexend';
-                ctx.textAlign = 'center';
+    // SPAWN RATE: Reduced chance (0.006) so words don't pile up too fast
+    if (Math.random() < 0.006) this.spawnFallWord();
+    
+    ctx.font = 'bold 20px Lexend';
+    ctx.textBaseline = 'middle';
 
-                for (let i = this.fall.words.length - 1; i >= 0; i--) {
-                    let word = this.fall.words[i];
-                    word.y += word.speed;
-                    ctx.fillText(word.tr, word.x, word.y);
-                    
-                    if (word.y > canvas.height) {
-                        this.fall.words.splice(i, 1);
-                        this.fall.lives--;
-                    }
-                }
-                
-                this.updateFallStats();
-                
-                if (this.fall.lives <= 0) {
-                    this.endGameFall();
-                }
-            },
-            checkGameFall(answer, input) {
-                if (!answer) return;
-                let found = false;
-                for (let i = this.fall.words.length - 1; i >= 0; i--) {
-                    if (this.fall.words[i].answer.toLowerCase() === answer.toLowerCase()) {
-                        this.fall.words.splice(i, 1);
-                        this.fall.score++;
-                        found = true;
-                        break;
-                    }
-                }
-                if (found) {
-                    input.value = "";
-                    this.spawnFallWord(); // Add another
-                } else {
-                    input.classList.add('animate-shake');
-                    setTimeout(() => input.classList.remove('animate-shake'), 500);
-                }
-                this.updateFallStats();
-            },
+    for (let i = this.fall.words.length - 1; i >= 0; i--) {
+        let word = this.fall.words[i];
+        word.y += word.speed;
+        
+        // Calculate dimensions for the "Chip" look
+        const textMetrics = ctx.measureText(word.tr);
+        const boxHeight = 36;
+        const boxWidth = textMetrics.width + 30;
+        
+        // A. Draw Shadow (for depth)
+        ctx.fillStyle = 'rgba(0,0,0,0.1)';
+        ctx.beginPath();
+        ctx.roundRect(word.x + 3, word.y + 3, boxWidth, boxHeight, 15);
+        ctx.fill();
+
+        // B. Draw Chip Background
+        ctx.fillStyle = word.color;
+        ctx.beginPath();
+        ctx.roundRect(word.x, word.y, boxWidth, boxHeight, 15); // Rounded pill shape
+        ctx.fill();
+        
+        // C. Draw Border
+        ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // D. Draw Text
+        ctx.fillStyle = '#1e293b'; // Dark text for contrast
+        ctx.textAlign = 'left';
+        ctx.fillText(word.tr, word.x + 15, word.y + (boxHeight/2));
+        
+        // Game Over Logic (Word hit bottom)
+        if (word.y > canvas.height) {
+            this.fall.words.splice(i, 1);
+            this.fall.lives--;
+            this.playSound('wrong');
+            this.updateFallStats();
+        }
+    }
+    
+    if (this.fall.lives <= 0) {
+        this.endGameFall();
+    }
+},
             updateFallStats() {
                 const scoreEl = document.getElementById('fall-score');
                 const livesEl = document.getElementById('fall-lives');
@@ -6224,11 +6463,15 @@ setWordStatus(wordId, level, status) {
                 if (livesEl) livesEl.innerText = '❤️'.repeat(this.fall.lives);
             },
             endGameFall() {
-                clearInterval(this.fall.gameLoop);
-                this.fall.gameLoop = null;
-                this.winGame('fall', this.fall.score);
-                setTimeout(() => this.navigate('challenges-games'), 2000);
-            },
+    clearInterval(this.fall.gameLoop);
+    this.fall.gameLoop = null;
+    
+    // Triggers the "You Won!" modal even when lives run out
+    this.winGame('fall', this.fall.score); 
+    
+    // Navigate away after 3 seconds
+    setTimeout(() => this.navigate('challenges-games'), 3000);
+},
             // --- NEW: LISTENING GAME LOGIC ---
             initGameListen() {
                 this.listen.word = allGameWords[Math.floor(Math.random() * allGameWords.length)];
@@ -6406,69 +6649,81 @@ setWordStatus(wordId, level, status) {
             // --- SOUND EFFECTS ENGINE ---
             // --- IMPROVED SOUND EFFECTS ENGINE ---
             playSound(type) {
-                const AudioContext = window.AudioContext || window.webkitAudioContext;
-                if (!AudioContext) return;
-                if (!this.audioCtx) this.audioCtx = new AudioContext();
-                
-                const ctx = this.audioCtx;
-                const now = ctx.currentTime;
-                
-                if (type === 'correct') {
-                    // Pleasant "Ding" (Bell-like)
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
-                    
-                    osc.type = 'sine';
-                    // A nice high C note
-                    osc.frequency.setValueAtTime(880, now); 
-                    // Quick fade out for a "bell" effect
-                    gain.gain.setValueAtTime(0.1, now);
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
-                    
-                    osc.start(now);
-                    osc.stop(now + 0.5);
-                } 
-                else if (type === 'wrong') {
-                    // Soft "Thud" (instead of harsh buzz)
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
-                    
-                    osc.type = 'triangle'; // Softer than sawtooth
-                    osc.frequency.setValueAtTime(150, now);
-                    osc.frequency.exponentialRampToValueAtTime(50, now + 0.2); // Pitch drop
-                    
-                    gain.gain.setValueAtTime(0.1, now);
-                    gain.gain.linearRampToValueAtTime(0.001, now + 0.2);
-                    
-                    osc.start(now);
-                    osc.stop(now + 0.2);
-                } 
-                else if (type === 'win') {
-                    // Victory Chord (C Major Arpeggio)
-                    const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
-                    notes.forEach((freq, i) => {
-                        const osc = ctx.createOscillator();
-                        const gain = ctx.createGain();
-                        osc.connect(gain);
-                        gain.connect(ctx.destination);
-                        
-                        osc.type = 'sine';
-                        osc.frequency.value = freq;
-                        
-                        const startTime = now + (i * 0.1);
-                        gain.gain.setValueAtTime(0, startTime);
-                        gain.gain.linearRampToValueAtTime(0.1, startTime + 0.05);
-                        gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.8);
-                        
-                        osc.start(startTime);
-                        osc.stop(startTime + 0.8);
-                    });
-                }
-            },
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContext) return;
+    if (!this.audioCtx) this.audioCtx = new AudioContext();
+    
+    const ctx = this.audioCtx;
+    const now = ctx.currentTime;
+    
+    if (type === 'flip') {
+        // NEW: Quick "Zip" sound for flipping
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        
+        // Frequency sweep to mimic air movement
+        osc.frequency.setValueAtTime(400, now);
+        osc.frequency.exponentialRampToValueAtTime(800, now + 0.1);
+        
+        // Volume envelope
+        gain.gain.setValueAtTime(0.05, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+        
+        osc.start(now);
+        osc.stop(now + 0.1);
+    } 
+    else if (type === 'correct') {
+        // ... (Keep your existing 'correct' logic here) ...
+        // Improved "Ding"
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(880, now); // A5
+        osc.frequency.exponentialRampToValueAtTime(1760, now + 0.1); // Slide up slightly for "shine"
+        gain.gain.setValueAtTime(0.1, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+        osc.start(now);
+        osc.stop(now + 0.6);
+    } 
+    else if (type === 'wrong') {
+        // ... (Keep your existing 'wrong' logic here) ...
+        // Improved "Thud"
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.type = 'sawtooth'; // More harsh
+        osc.frequency.setValueAtTime(100, now);
+        osc.frequency.exponentialRampToValueAtTime(50, now + 0.3);
+        gain.gain.setValueAtTime(0.1, now);
+        gain.gain.linearRampToValueAtTime(0.001, now + 0.3);
+        osc.start(now);
+        osc.stop(now + 0.3);
+    }
+    else if (type === 'win') {
+        // ... (Keep your existing 'win' logic) ...
+        // Add a celebratory arpeggio if you haven't already
+        const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51, 1567.98]; 
+        notes.forEach((freq, i) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.type = 'triangle';
+            osc.frequency.value = freq;
+            const startTime = now + (i * 0.08);
+            gain.gain.setValueAtTime(0, startTime);
+            gain.gain.linearRampToValueAtTime(0.1, startTime + 0.05);
+            gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.6);
+            osc.start(startTime);
+            osc.stop(startTime + 0.6);
+        });
+    }
+},
 
             openPronounceModal(word) {
                 if (!this.recognition) {
