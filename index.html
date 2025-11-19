@@ -272,6 +272,182 @@ body.dark .game-card-back {
     box-shadow: 0 0 10px 5px #ef4444; /* Red glow for missed/wrong */
     border-color: #ef4444 !important;
 }
+ /* --- SNIPPET 1: MAP & LESSON STYLES --- */
+
+/* Explore Card Grid Styles */
+.explore-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 1.5rem;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+}
+.explore-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+}
+.explore-icon-container {
+    height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+.explore-icon-container i {
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
+}
+
+/* Level Badges */
+.level-badge {
+    font-size: 0.7rem;
+    padding: 4px 10px;
+    border-radius: 99px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+.level-beginner { background-color: #dbeafe; color: #1e40af; }
+.level-intermediate { background-color: #f3e8ff; color: #6b21a8; }
+.level-advanced { background-color: #fee2e2; color: #991b1b; }
+.dark .level-beginner { background-color: #1e3a8a; color: #dbeafe; }
+.dark .level-intermediate { background-color: #581c87; color: #f3e8ff; }
+.dark .level-advanced { background-color: #7f1d1d; color: #fee2e2; }
+
+/* Animations */
+@keyframes popIn {
+    0% { opacity: 0; transform: scale(0.8); }
+    100% { opacity: 1; transform: scale(1); }
+}
+.animate-popIn {
+    animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+/* --- SNIPPET 1: NEW GAME STYLES --- */
+.lesson-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.lesson-option-btn {
+    background-color: white;
+    border: 2px solid #e2e8f0;
+    border-bottom-width: 4px;
+    border-radius: 1rem;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.dark .lesson-option-btn {
+    background-color: #1e293b;
+    border-color: #334155;
+}
+
+.lesson-option-btn:active {
+    transform: translateY(2px);
+    border-bottom-width: 2px;
+}
+
+.lesson-option-btn.correct {
+    background-color: #dcfce7;
+    border-color: #22c55e;
+    color: #166534;
+}
+.dark .lesson-option-btn.correct {
+    background-color: #064e3b;
+    border-color: #22c55e;
+    color: #dcfce7;
+}
+
+.lesson-option-btn.wrong {
+    background-color: #fee2e2;
+    border-color: #ef4444;
+    opacity: 0.6;
+}
+
+/* --- UPDATE THIS CSS CLASS --- */
+.animate-popIn {
+    /* 'forwards' ensures the element stays visible at 100% opacity after animation */
+    animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+/* --- SNIPPET 1: CSS FOR COMPLETED STATE & NEW GAMES --- */
+
+/* Completed Card Style */
+.explore-card.completed {
+    border: 2px solid #22c55e;
+    position: relative;
+}
+.explore-card.completed::after {
+    content: "\f00c"; /* FontAwesome Check */
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #22c55e;
+    color: white;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    z-index: 10;
+}
+
+/* True/False Game Buttons */
+.tf-btn {
+    width: 100%;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    font-weight: 800;
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: transform 0.1s;
+    border-bottom-width: 4px;
+}
+.tf-btn:active { transform: translateY(2px); border-bottom-width: 2px; }
+.tf-true { background-color: #dcfce7; color: #166534; border-color: #22c55e; }
+.tf-false { background-color: #fee2e2; color: #991b1b; border-color: #ef4444; }
+/* --- SNIPPET 1: IMAGE CARD STYLES --- */
+.lesson-image-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8fafc;
+    border-radius: 1rem;
+    overflow: hidden;
+}
+.lesson-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Keeps image ratio */
+    transition: transform 0.3s ease;
+}
+.dark .lesson-image-container {
+    background: #1e293b;
+}
+
+/* Update Option Buttons to hold images */
+.lesson-option-btn.image-mode {
+    padding: 0.5rem;
+    height: 160px; /* Taller for images */
+}
+.lesson-option-btn.image-mode:hover .lesson-image {
+    transform: scale(1.1);
+}
 
     </style>
 </head>
@@ -302,6 +478,10 @@ body.dark .game-card-back {
                     <i class="fas fa-chart-pie w-6 text-center text-lg"></i>
                     <span data-key="nav_dashboard">Dashboard</span>
                 </button>
+<button onclick="app.navigate('map')" data-page="map" class="nav-btn w-full flex items-center space-x-3 rtl:space-x-reverse p-3 rounded-xl font-semibold">
+    <i class="fas fa-map-marked-alt w-6 text-center text-lg"></i>
+    <span data-key="nav_map">Explore</span>
+</button>
                 <!-- NEW: Lessons Tab -->
                 <button onclick="app.navigate('lessons')" data-page="lessons" class="nav-btn w-full flex items-center space-x-3 rtl:space-x-reverse p-3 rounded-xl font-semibold">
                     <i class="fas fa-book-open w-6 text-center text-lg"></i>
@@ -408,10 +588,10 @@ body.dark .game-card-back {
                 <i class="fas fa-chart-pie text-xl mb-1"></i>
                 <span class="text-xs" data-key="nav_dashboard">Dashboard</span>
             </button>
-            <button onclick="app.navigate('lessons')" data-page="lessons" class="nav-btn-mobile flex flex-col items-center w-full p-2 font-semibold">
-                <i class="fas fa-book-open text-xl mb-1"></i>
-                <span class="text-xs" data-key="nav_lessons">Lessons</span>
-            </button>
+            <button onclick="app.navigate('map')" data-page="map" class="nav-btn-mobile flex flex-col items-center w-full p-2 font-semibold">
+    <i class="fas fa-map-marked-alt text-xl mb-1"></i>
+    <span class="text-xs" data-key="nav_map">Explore</span>
+</button>
             <button onclick="app.navigate('converse')" data-page="converse" class="nav-btn-mobile flex flex-col items-center w-full p-2 font-semibold">
                 <i class="fas fa-comments text-xl mb-1"></i>
                 <span class="text-xs" data-key="nav_converse">AI Chat</span>
@@ -507,6 +687,154 @@ body.dark .game-card-back {
             
         </div>        
     </template>
+    <!-- --- SNIPPET 2: HTML TEMPLATES --- -->
+
+<!-- MAIN EXPLORE MAP TEMPLATE -->
+<!-- NEW: EXPLORE MAP TEMPLATE -->
+<template id="tpl-map">
+    <div class="fade-in-up max-w-6xl mx-auto pb-24 md:pb-8 p-4">
+        <h2 class="text-3xl font-bold mb-8 accent-text" data-key="map_title">Learning Path</h2>
+        <div id="explore-container" class="space-y-12">
+            <!-- Content injected by JS -->
+        </div>
+    </div>
+</template>
+
+<!-- NEW: INTERACTIVE LESSON MODAL -->
+<!-- REPLACEMENT TEMPLATE: tpl-map-lesson -->
+<template id="tpl-map-lesson">
+    <div class="fixed inset-0 z-50 bg-slate-50 dark:bg-slate-900 flex flex-col">
+        <!-- Header -->
+        <div class="h-16 flex items-center justify-between px-4 shadow-sm bg-white dark:bg-slate-800 z-10">
+            <button onclick="app.quitLesson()" class="text-gray-400 hover:text-red-500 transition">
+                <i class="fas fa-times text-2xl"></i>
+            </button>
+            <div class="flex-1 mx-6">
+                <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-3 overflow-hidden">
+                    <div id="lesson-progress-bar" class="accent-bg h-3 rounded-full transition-all duration-500 ease-out" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="font-bold text-lg accent-text flex items-center">
+                <i class="fas fa-star text-yellow-400 mr-2"></i>
+                <span id="lesson-score-display">0</span>
+            </div>
+        </div>
+
+        <!-- Main Game Area -->
+        <div class="flex-1 flex flex-col items-center justify-center p-6 relative overflow-y-auto">
+            
+            <!-- Card Container (Icons/Words appear here) -->
+            <div id="lesson-card-container" class="w-full max-w-md min-h-[300px] flex flex-col items-center justify-center">
+                <div id="lesson-loading" class="flex flex-col items-center">
+                    <div class="loader"></div>
+                    <p class="mt-4 font-bold text-gray-500">Loading Lesson...</p>
+                </div>
+            </div>
+
+            <!-- Feedback Popup (Correct/Wrong) -->
+            <div id="lesson-feedback" class="hidden fixed bottom-40 left-0 right-0 text-center pointer-events-none z-20 animate-popIn">
+                <div class="feedback-text inline-block bg-white dark:bg-slate-800 px-8 py-4 rounded-2xl shadow-2xl border-b-4 font-bold text-2xl">
+                    Correct!
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Controls (Options & Continue) -->
+        <div class="h-auto min-h-[8rem] bg-white dark:bg-slate-800 border-t dark:border-slate-700 flex flex-col items-center justify-center px-6 py-4 z-10 w-full">
+            
+            <!-- Dynamic Options Area (Grid of buttons) -->
+            <div id="lesson-options-area" class="w-full max-w-md"></div>
+
+            <!-- Continue Button -->
+            <button id="lesson-continue-btn" onclick="app.nextLessonStep()" class="hidden w-full max-w-md accent-bg text-white font-bold py-4 rounded-2xl shadow-lg text-xl hover:brightness-110 active:scale-95 transition mt-2">
+                Continue <i class="fas fa-arrow-right ml-2"></i>
+            </button>
+            
+            <!-- Hidden choice btns container to prevent JS error if referenced by old code -->
+            <div id="lesson-choice-btns" class="hidden"></div>
+        </div>
+        
+        <!-- Lesson Complete Overlay -->
+        <div id="lesson-complete-screen" class="hidden absolute inset-0 bg-slate-50 dark:bg-slate-900 flex flex-col items-center justify-center z-50 animate-popIn">
+            <div class="w-32 h-32 bg-yellow-100 rounded-full flex items-center justify-center mb-6 shadow-lg">
+                <i class="fas fa-trophy text-6xl text-yellow-500"></i>
+            </div>
+            <h2 class="text-4xl font-bold mb-2 text-gray-800 dark:text-white">Lesson Complete!</h2>
+            <p class="text-xl text-gray-500 mb-10">You mastered new words!</p>
+            <button onclick="app.finishLesson()" class="w-64 accent-bg text-white font-bold py-4 rounded-full shadow-xl text-xl hover:scale-105 transition">
+                Continue
+            </button>
+        </div>
+    </div>
+</template>
+
+<!-- INTERACTIVE LESSON MODAL TEMPLATE -->
+<template id="tpl-map-lesson">
+    <div class="fixed inset-0 z-50 bg-slate-50 dark:bg-slate-900 flex flex-col">
+        <!-- Header -->
+        <div class="h-16 flex items-center justify-between px-4 shadow-sm bg-white dark:bg-slate-800 z-10">
+            <button onclick="app.quitLesson()" class="text-gray-400 hover:text-red-500 transition">
+                <i class="fas fa-times text-2xl"></i>
+            </button>
+            <div class="flex-1 mx-6">
+                <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-3 overflow-hidden">
+                    <div id="lesson-progress-bar" class="accent-bg h-3 rounded-full transition-all duration-500 ease-out" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="font-bold text-lg accent-text flex items-center">
+                <i class="fas fa-star text-yellow-400 mr-2"></i>
+                <span id="lesson-score-display">0</span>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="flex-1 flex flex-col items-center justify-center p-6 relative overflow-hidden">
+            
+            <!-- Card Container -->
+            <div id="lesson-card-container" class="w-full max-w-sm h-[500px] relative flex items-center justify-center">
+                <div id="lesson-loading" class="flex flex-col items-center">
+                    <div class="loader"></div>
+                    <p class="mt-4 font-bold text-gray-500">Loading Lesson...</p>
+                </div>
+            </div>
+
+            <!-- Feedback Popup (Correct/Incorrect) -->
+            <div id="lesson-feedback" class="hidden absolute bottom-32 left-0 right-0 text-center pointer-events-none animate-popIn">
+                <div class="inline-block bg-white dark:bg-slate-800 px-8 py-4 rounded-2xl shadow-2xl border-b-4 border-green-500 font-bold text-2xl feedback-text">
+                    Correct!
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Controls -->
+        <div class="h-28 bg-white dark:bg-slate-800 border-t dark:border-slate-700 flex items-center justify-center px-6 pb-6 z-10">
+            <button id="lesson-continue-btn" onclick="app.nextLessonStep()" class="w-full max-w-sm accent-bg text-white font-bold py-4 rounded-2xl shadow-lg text-xl hover:brightness-110 active:scale-95 transition hidden">
+                Continue <i class="fas fa-arrow-right ml-2"></i>
+            </button>
+            
+            <div id="lesson-choice-btns" class="hidden w-full max-w-sm grid grid-cols-2 gap-4">
+                <button onclick="app.checkLessonAnswer(false)" class="bg-red-100 text-red-600 border-b-4 border-red-200 hover:bg-red-200 hover:border-red-300 py-4 rounded-2xl font-bold text-xl transition active:scale-95">
+                    <i class="fas fa-times mr-2"></i> False
+                </button>
+                <button onclick="app.checkLessonAnswer(true)" class="bg-green-100 text-green-600 border-b-4 border-green-200 hover:bg-green-200 hover:border-green-300 py-4 rounded-2xl font-bold text-xl transition active:scale-95">
+                    <i class="fas fa-check mr-2"></i> True
+                </button>
+            </div>
+        </div>
+        
+        <!-- Lesson Complete Overlay -->
+        <div id="lesson-complete-screen" class="hidden absolute inset-0 bg-slate-50 dark:bg-slate-900 flex flex-col items-center justify-center z-50 animate-popIn">
+            <div class="w-32 h-32 bg-yellow-100 rounded-full flex items-center justify-center mb-6 shadow-lg">
+                <i class="fas fa-trophy text-6xl text-yellow-500"></i>
+            </div>
+            <h2 class="text-4xl font-bold mb-2 text-gray-800 dark:text-white">Lesson Complete!</h2>
+            <p class="text-xl text-gray-500 mb-10">You mastered <span class="accent-text font-bold">5 new words</span></p>
+            <button onclick="app.finishLesson()" class="w-64 accent-bg text-white font-bold py-4 rounded-full shadow-xl text-xl hover:scale-105 transition">
+                Continue
+            </button>
+        </div>
+    </div>
+</template>
     <template id="tpl-stories">
         <div class="fade-in-up max-w-4xl mx-auto pb-16 md:pb-0">
             <h2 class="text-2xl font-bold mb-6" data-key="nav_stories">Stories</h2>
@@ -1384,6 +1712,621 @@ body.dark .game-card-back {
                 nav_converse: "محادثة AI", nav_tutor: "مدرس AI", nav_challenges: "التحديات",
             }
         };
+        // --- EXPANDED CONTENT: A1 to C1 ---
+// --- MASSIVE CURRICULUM: A1 to C1 ---
+// --- MASSIVE CURRICULUM: A1 to C1 (Focus on Deep A1) ---
+const mapData = [
+    // ==========================================
+    // MODULE 1: THE ABSOLUTE BASICS (A1)
+    // ==========================================
+    {
+        title: "🌱 A1.1: First Steps",
+        cards: [
+            { 
+                id: 'a1_greet_1', title: "Greetings 1", topics: 5, level: "A1", bg: "bg-green-100 dark:bg-green-900/40", icon: "fa-hand-sparkles", color: "text-green-600", 
+                words: [
+                    { tr: 'Merhaba', en: 'Hello', icon: 'fa-hand-paper' },
+                    { tr: 'Selam', en: 'Hi', icon: 'fa-hand-peace' },
+                    { tr: 'Günaydın', en: 'Good Morning', icon: 'fa-sun' },
+                    { tr: 'İyi geceler', en: 'Good Night', icon: 'fa-moon' },
+                    { tr: 'Görüşürüz', en: 'See you', icon: 'fa-walking' }
+                ] 
+            },
+            { 
+                id: 'a1_greet_2', title: "Greetings 2", topics: 5, level: "A1", bg: "bg-green-100 dark:bg-green-900/40", icon: "fa-comments", color: "text-green-600", 
+                words: [
+                    { tr: 'Nasılsın?', en: 'How are you?', icon: 'fa-question-circle' },
+                    { tr: 'İyiyim', en: 'I am fine', icon: 'fa-smile' },
+                    { tr: 'Teşekkürler', en: 'Thanks', icon: 'fa-thumbs-up' },
+                    { tr: 'Rica ederim', en: 'You are welcome', icon: 'fa-check' },
+                    { tr: 'Hoşça kal', en: 'Goodbye', icon: 'fa-door-open' }
+                ] 
+            },
+            { 
+                id: 'a1_polite', title: "Being Polite", topics: 5, level: "A1", bg: "bg-blue-100 dark:bg-blue-900/40", icon: "fa-heart", color: "text-blue-600", 
+                words: [
+                    { tr: 'Lütfen', en: 'Please', icon: 'fa-praying-hands' },
+                    { tr: 'Pardon', en: 'Excuse me', icon: 'fa-exclamation' },
+                    { tr: 'Özür dilerim', en: 'I am sorry', icon: 'fa-sad-tear' },
+                    { tr: 'Evet', en: 'Yes', icon: 'fa-check' },
+                    { tr: 'Hayır', en: 'No', icon: 'fa-times' }
+                ] 
+            },
+            { 
+                id: 'a1_nums_1', title: "Numbers 0-5", topics: 5, level: "A1", bg: "bg-yellow-100 dark:bg-yellow-900/40", icon: "fa-sort-numeric-down", color: "text-yellow-600", 
+                words: [
+                    { tr: 'Sıfır', en: 'Zero', icon: 'fa-0' },
+                    { tr: 'Bir', en: 'One', icon: 'fa-1' },
+                    { tr: 'İki', en: 'Two', icon: 'fa-2' },
+                    { tr: 'Üç', en: 'Three', icon: 'fa-3' },
+                    { tr: 'Dört', en: 'Four', icon: 'fa-4' },
+                    { tr: 'Beş', en: 'Five', icon: 'fa-5' }
+                ] 
+            },
+             { 
+                id: 'a1_nums_2', title: "Numbers 6-10", topics: 5, level: "A1", bg: "bg-yellow-100 dark:bg-yellow-900/40", icon: "fa-sort-numeric-up", color: "text-yellow-600", 
+                words: [
+                    { tr: 'Altı', en: 'Six', icon: 'fa-6' },
+                    { tr: 'Yedi', en: 'Seven', icon: 'fa-7' },
+                    { tr: 'Sekiz', en: 'Eight', icon: 'fa-8' },
+                    { tr: 'Dokuz', en: 'Nine', icon: 'fa-9' },
+                    { tr: 'On', en: 'Ten', icon: 'fa-1' } // Using 1 as icon for 10
+                ] 
+            },
+            { 
+                id: 'a1_questions', title: "Question Words", topics: 5, level: "A1", bg: "bg-purple-100 dark:bg-purple-900/40", icon: "fa-question", color: "text-purple-600", 
+                words: [
+                    { tr: 'Ne?', en: 'What?', icon: 'fa-cube' },
+                    { tr: 'Kim?', en: 'Who?', icon: 'fa-user' },
+                    { tr: 'Nerede?', en: 'Where?', icon: 'fa-map-marker-alt' },
+                    { tr: 'Ne zaman?', en: 'When?', icon: 'fa-clock' },
+                    { tr: 'Nasıl?', en: 'How?', icon: 'fa-cogs' }
+                ] 
+            }
+        ]
+    },
+
+    // ==========================================
+    // MODULE 2: FOOD & DRINK (Deep Dive)
+    // ==========================================
+    {
+        title: "🍎 A1.2: Food & Drink",
+        cards: [
+            { 
+                id: 'a1_food_basics', title: "The Basics", topics: 5, level: "A1", bg: "bg-red-100 dark:bg-red-900/40", icon: "fa-utensils", color: "text-red-600", 
+                words: [
+                    { tr: 'Yemek', en: 'Food', icon: 'fa-utensils' },
+                    { tr: 'Ekmek', en: 'Bread', icon: 'fa-bread-slice' },
+                    { tr: 'Su', en: 'Water', icon: 'fa-glass-whiskey' },
+                    { tr: 'Tuz', en: 'Salt', icon: 'fa-shaker' }, // approx
+                    { tr: 'Şeker', en: 'Sugar', icon: 'fa-cube' }
+                ] 
+            },
+            { 
+                id: 'a1_breakfast', title: "Turkish Breakfast", topics: 5, level: "A1", bg: "bg-orange-100 dark:bg-orange-900/40", icon: "fa-egg", color: "text-orange-600", 
+                words: [
+                    { tr: 'Yumurta', en: 'Egg', icon: 'fa-egg' },
+                    { tr: 'Peynir', en: 'Cheese', icon: 'fa-cheese' },
+                    { tr: 'Zeytin', en: 'Olive', icon: 'fa-circle' }, // visual approx
+                    { tr: 'Bal', en: 'Honey', icon: 'fa-archive' }, // pot approx
+                    { tr: 'Tereyağı', en: 'Butter', icon: 'fa-bread-slice' }
+                ] 
+            },
+            { 
+                id: 'a1_fruits', title: "Fresh Fruits", topics: 5, level: "A1", bg: "bg-green-100 dark:bg-green-900/40", icon: "fa-apple-alt", color: "text-green-600", 
+                words: [
+                    { tr: 'Elma', en: 'Apple', icon: 'fa-apple-alt' },
+                    { tr: 'Muz', en: 'Banana', icon: 'fa-carrot' }, // shape approx
+                    { tr: 'Çilek', en: 'Strawberry', icon: 'fa-heart' }, // shape approx
+                    { tr: 'Portakal', en: 'Orange', icon: 'fa-circle text-orange-500' },
+                    { tr: 'Karpuz', en: 'Watermelon', icon: 'fa-circle text-green-600' }
+                ] 
+            },
+            { 
+                id: 'a1_drinks', title: "Drinks & Cafe", topics: 5, level: "A1", bg: "bg-amber-100 dark:bg-amber-900/40", icon: "fa-coffee", color: "text-amber-700", 
+                words: [
+                    { tr: 'Çay', en: 'Tea', icon: 'fa-mug-hot' },
+                    { tr: 'Kahve', en: 'Coffee', icon: 'fa-coffee' },
+                    { tr: 'Süt', en: 'Milk', icon: 'fa-prescription-bottle' },
+                    { tr: 'Meyve suyu', en: 'Fruit juice', icon: 'fa-glass-martini' },
+                    { tr: 'Ayran', en: 'Ayran', icon: 'fa-glass-whiskey' }
+                ] 
+            },
+            { 
+                id: 'a1_veg', title: "Vegetables", topics: 5, level: "A1", bg: "bg-emerald-100 dark:bg-emerald-900/40", icon: "fa-carrot", color: "text-emerald-600", 
+                words: [
+                    { tr: 'Domates', en: 'Tomato', icon: 'fa-circle text-red-500' },
+                    { tr: 'Patates', en: 'Potato', icon: 'fa-cookie' }, // shape approx
+                    { tr: 'Soğan', en: 'Onion', icon: 'fa-baseball-ball' },
+                    { tr: 'Biber', en: 'Pepper', icon: 'fa-pepper-hot' },
+                    { tr: 'Salatalık', en: 'Cucumber', icon: 'fa-pen' } // shape approx
+                ] 
+            },
+            { 
+                id: 'a1_restaurant', title: "At the Restaurant", topics: 5, level: "A1", bg: "bg-rose-100 dark:bg-rose-900/40", icon: "fa-concierge-bell", color: "text-rose-600", 
+                words: [
+                    { tr: 'Garson', en: 'Waiter', icon: 'fa-user-tie' },
+                    { tr: 'Menü', en: 'Menu', icon: 'fa-book-open' },
+                    { tr: 'Sipariş', en: 'Order', icon: 'fa-bell' },
+                    { tr: 'Hesap', en: 'Bill', icon: 'fa-receipt' },
+                    { tr: 'Bahşiş', en: 'Tip', icon: 'fa-coins' }
+                ] 
+            }
+        ]
+    },
+
+    // ==========================================
+    // MODULE 3: FAMILY & PEOPLE
+    // ==========================================
+    {
+        title: "👨‍👩‍👧 A1.3: Family & People",
+        cards: [
+            { 
+                id: 'a1_fam_core', title: "Immediate Family", topics: 5, level: "A1", bg: "bg-pink-100 dark:bg-pink-900/40", icon: "fa-users", color: "text-pink-600", 
+                words: [
+                    { tr: 'Anne', en: 'Mother', icon: 'fa-female' },
+                    { tr: 'Baba', en: 'Father', icon: 'fa-male' },
+                    { tr: 'Kız kardeş', en: 'Sister', icon: 'fa-child' },
+                    { tr: 'Erkek kardeş', en: 'Brother', icon: 'fa-child' },
+                    { tr: 'Bebek', en: 'Baby', icon: 'fa-baby' }
+                ] 
+            },
+            { 
+                id: 'a1_fam_ext', title: "Extended Family", topics: 5, level: "A1", bg: "bg-purple-100 dark:bg-purple-900/40", icon: "fa-user-friends", color: "text-purple-600", 
+                words: [
+                    { tr: 'Dede', en: 'Grandfather', icon: 'fa-user-clock' },
+                    { tr: 'Nine', en: 'Grandmother', icon: 'fa-user-nurse' },
+                    { tr: 'Teyze', en: 'Aunt (Maternal)', icon: 'fa-user' },
+                    { tr: 'Amca', en: 'Uncle (Paternal)', icon: 'fa-user-tie' },
+                    { tr: 'Kuzen', en: 'Cousin', icon: 'fa-user-graduate' }
+                ] 
+            },
+            { 
+                id: 'a1_people', title: "Describing People", topics: 5, level: "A1", bg: "bg-indigo-100 dark:bg-indigo-900/40", icon: "fa-id-card", color: "text-indigo-600", 
+                words: [
+                    { tr: 'Kadın', en: 'Woman', icon: 'fa-female' },
+                    { tr: 'Adam', en: 'Man', icon: 'fa-male' },
+                    { tr: 'Çocuk', en: 'Child', icon: 'fa-child' },
+                    { tr: 'Genç', en: 'Young', icon: 'fa-user-astronaut' },
+                    { tr: 'Yaşlı', en: 'Old', icon: 'fa-blind' }
+                ] 
+            },
+            { 
+                id: 'a1_jobs_1', title: "Jobs I", topics: 5, level: "A1", bg: "bg-slate-200 dark:bg-slate-700", icon: "fa-briefcase", color: "text-slate-600", 
+                words: [
+                    { tr: 'Öğretmen', en: 'Teacher', icon: 'fa-chalkboard-teacher' },
+                    { tr: 'Doktor', en: 'Doctor', icon: 'fa-user-md' },
+                    { tr: 'Mühendis', en: 'Engineer', icon: 'fa-hard-hat' },
+                    { tr: 'Polis', en: 'Police', icon: 'fa-user-shield' },
+                    { tr: 'Öğrenci', en: 'Student', icon: 'fa-user-graduate' }
+                ] 
+            }
+        ]
+    },
+
+    // ==========================================
+    // MODULE 4: HOME & LIVING
+    // ==========================================
+    {
+        title: "🏠 A1.4: My Home",
+        cards: [
+            { 
+                id: 'a1_rooms', title: "Rooms", topics: 5, level: "A1", bg: "bg-orange-100 dark:bg-orange-900/40", icon: "fa-home", color: "text-orange-600", 
+                words: [
+                    { tr: 'Oda', en: 'Room', icon: 'fa-door-closed' },
+                    { tr: 'Salon', en: 'Living Room', icon: 'fa-couch' },
+                    { tr: 'Mutfak', en: 'Kitchen', icon: 'fa-blender' },
+                    { tr: 'Banyo', en: 'Bathroom', icon: 'fa-bath' },
+                    { tr: 'Bahçe', en: 'Garden', icon: 'fa-tree' }
+                ] 
+            },
+            { 
+                id: 'a1_furniture', title: "Furniture", topics: 5, level: "A1", bg: "bg-amber-100 dark:bg-amber-900/40", icon: "fa-couch", color: "text-amber-700", 
+                words: [
+                    { tr: 'Masa', en: 'Table', icon: 'fa-table' },
+                    { tr: 'Sandalye', en: 'Chair', icon: 'fa-chair' },
+                    { tr: 'Koltuk', en: 'Armchair', icon: 'fa-couch' },
+                    { tr: 'Yatak', en: 'Bed', icon: 'fa-bed' },
+                    { tr: 'Dolap', en: 'Cupboard', icon: 'fa-archive' }
+                ] 
+            },
+            { 
+                id: 'a1_kitchen_items', title: "In the Kitchen", topics: 5, level: "A1", bg: "bg-red-100 dark:bg-red-900/40", icon: "fa-utensil-spoon", color: "text-red-600", 
+                words: [
+                    { tr: 'Çatal', en: 'Fork', icon: 'fa-utensil-spoon' },
+                    { tr: 'Kaşık', en: 'Spoon', icon: 'fa-utensil-spoon' },
+                    { tr: 'Bıçak', en: 'Knife', icon: 'fa-utensils' },
+                    { tr: 'Tabak', en: 'Plate', icon: 'fa-circle' },
+                    { tr: 'Bardak', en: 'Glass', icon: 'fa-glass-whiskey' }
+                ] 
+            },
+            { 
+                id: 'a1_tech_home', title: "Electronics", topics: 5, level: "A1", bg: "bg-gray-200 dark:bg-gray-700", icon: "fa-tv", color: "text-gray-600", 
+                words: [
+                    { tr: 'Televizyon', en: 'TV', icon: 'fa-tv' },
+                    { tr: 'Bilgisayar', en: 'Computer', icon: 'fa-laptop' },
+                    { tr: 'Telefon', en: 'Phone', icon: 'fa-mobile-alt' },
+                    { tr: 'Lamba', en: 'Lamp', icon: 'fa-lightbulb' },
+                    { tr: 'Saat', en: 'Clock', icon: 'fa-clock' }
+                ] 
+            }
+        ]
+    },
+
+    // ==========================================
+    // MODULE 5: CITY & TRAVEL
+    // ==========================================
+    {
+        title: "✈️ A1.5: City & Travel",
+        cards: [
+            { 
+                id: 'a1_places', title: "City Places", topics: 5, level: "A1", bg: "bg-cyan-100 dark:bg-cyan-900/40", icon: "fa-building", color: "text-cyan-600", 
+                words: [
+                    { tr: 'Okul', en: 'School', icon: 'fa-school' },
+                    { tr: 'Hastane', en: 'Hospital', icon: 'fa-hospital' },
+                    { tr: 'Park', en: 'Park', icon: 'fa-tree' },
+                    { tr: 'Otel', en: 'Hotel', icon: 'fa-hotel' },
+                    { tr: 'Banka', en: 'Bank', icon: 'fa-university' }
+                ] 
+            },
+            { 
+                id: 'a1_transport', title: "Vehicles", topics: 5, level: "A1", bg: "bg-blue-100 dark:bg-blue-900/40", icon: "fa-car", color: "text-blue-600", 
+                words: [
+                    { tr: 'Araba', en: 'Car', icon: 'fa-car' },
+                    { tr: 'Otobüs', en: 'Bus', icon: 'fa-bus' },
+                    { tr: 'Uçak', en: 'Plane', icon: 'fa-plane' },
+                    { tr: 'Tren', en: 'Train', icon: 'fa-subway' },
+                    { tr: 'Bisiklet', en: 'Bicycle', icon: 'fa-bicycle' }
+                ] 
+            },
+            { 
+                id: 'a1_directions', title: "Directions", topics: 5, level: "A1", bg: "bg-teal-100 dark:bg-teal-900/40", icon: "fa-map-signs", color: "text-teal-600", 
+                words: [
+                    { tr: 'Sağ', en: 'Right', icon: 'fa-arrow-right' },
+                    { tr: 'Sol', en: 'Left', icon: 'fa-arrow-left' },
+                    { tr: 'Düz', en: 'Straight', icon: 'fa-arrow-up' },
+                    { tr: 'Geri', en: 'Back', icon: 'fa-arrow-down' },
+                    { tr: 'Burada', en: 'Here', icon: 'fa-map-marker' }
+                ] 
+            },
+            { 
+                id: 'a1_airport', title: "At the Airport", topics: 5, level: "A1", bg: "bg-indigo-100 dark:bg-indigo-900/40", icon: "fa-plane-departure", color: "text-indigo-600", 
+                words: [
+                    { tr: 'Bilet', en: 'Ticket', icon: 'fa-ticket-alt' },
+                    { tr: 'Pasaport', en: 'Passport', icon: 'fa-passport' },
+                    { tr: 'Bavul', en: 'Suitcase', icon: 'fa-suitcase' },
+                    { tr: 'Yolcu', en: 'Passenger', icon: 'fa-user' },
+                    { tr: 'Kapı', en: 'Gate', icon: 'fa-door-open' }
+                ] 
+            },
+            { 
+                id: 'a1_hotel', title: "Hotel Basics", topics: 5, level: "A1", bg: "bg-violet-100 dark:bg-violet-900/40", icon: "fa-bed", color: "text-violet-600", 
+                words: [
+                    { tr: 'Rezervasyon', en: 'Reservation', icon: 'fa-calendar-check' },
+                    { tr: 'Anahtar', en: 'Key', icon: 'fa-key' },
+                    { tr: 'Oda', en: 'Room', icon: 'fa-door-closed' },
+                    { tr: 'Giriş', en: 'Check-in', icon: 'fa-sign-in-alt' },
+                    { tr: 'Çıkış', en: 'Check-out', icon: 'fa-sign-out-alt' }
+                ] 
+            }
+        ]
+    },
+
+    // ==========================================
+    // MODULE 6: TIME & NATURE
+    // ==========================================
+    {
+        title: "⏰ A1: Time & Nature",
+        cards: [
+            { 
+                id: 'a1_week', title: "Days of the Week", topics: 7, level: "A1", bg: "bg-fuchsia-100 dark:bg-fuchsia-900/40", icon: "fa-calendar-day", color: "text-fuchsia-600", 
+                words: [
+                    { tr: 'Pazartesi', en: 'Monday', icon: 'fa-calendar' },
+                    { tr: 'Salı', en: 'Tuesday', icon: 'fa-calendar' },
+                    { tr: 'Çarşamba', en: 'Wednesday', icon: 'fa-calendar' },
+                    { tr: 'Perşembe', en: 'Thursday', icon: 'fa-calendar' },
+                    { tr: 'Cuma', en: 'Friday', icon: 'fa-calendar-check' },
+                    { tr: 'Cumartesi', en: 'Saturday', icon: 'fa-glass-cheers' },
+                    { tr: 'Pazar', en: 'Sunday', icon: 'fa-sun' }
+                ] 
+            },
+            { 
+                id: 'a1_seasons', title: "Seasons", topics: 4, level: "A1", bg: "bg-lime-100 dark:bg-lime-900/40", icon: "fa-leaf", color: "text-lime-600", 
+                words: [
+                    { tr: 'İlkbahar', en: 'Spring', icon: 'fa-seedling' },
+                    { tr: 'Yaz', en: 'Summer', icon: 'fa-sun' },
+                    { tr: 'Sonbahar', en: 'Autumn', icon: 'fa-leaf' },
+                    { tr: 'Kış', en: 'Winter', icon: 'fa-snowflake' }
+                ] 
+            },
+            { 
+                id: 'a1_weather', title: "Weather", topics: 5, level: "A1", bg: "bg-sky-100 dark:bg-sky-900/40", icon: "fa-cloud", color: "text-sky-600", 
+                words: [
+                    { tr: 'Sıcak', en: 'Hot', icon: 'fa-temperature-high' },
+                    { tr: 'Soğuk', en: 'Cold', icon: 'fa-temperature-low' },
+                    { tr: 'Yağmur', en: 'Rain', icon: 'fa-cloud-rain' },
+                    { tr: 'Kar', en: 'Snow', icon: 'fa-snowflake' },
+                    { tr: 'Güneşli', en: 'Sunny', icon: 'fa-sun' }
+                ] 
+            },
+            { 
+                id: 'a1_nature', title: "Outdoors", topics: 5, level: "A1", bg: "bg-emerald-100 dark:bg-emerald-900/40", icon: "fa-mountain", color: "text-emerald-600", 
+                words: [
+                    { tr: 'Dağ', en: 'Mountain', icon: 'fa-mountain' },
+                    { tr: 'Deniz', en: 'Sea', icon: 'fa-water' },
+                    { tr: 'Orman', en: 'Forest', icon: 'fa-tree' },
+                    { tr: 'Göl', en: 'Lake', icon: 'fa-water' }, // approx
+                    { tr: 'Plaj', en: 'Beach', icon: 'fa-umbrella-beach' }
+                ] 
+            },
+            { 
+                id: 'a1_animals', title: "Animals", topics: 5, level: "A1", bg: "bg-orange-100 dark:bg-orange-900/40", icon: "fa-paw", color: "text-orange-600", 
+                words: [
+                    { tr: 'Kedi', en: 'Cat', icon: 'fa-cat' },
+                    { tr: 'Köpek', en: 'Dog', icon: 'fa-dog' },
+                    { tr: 'Kuş', en: 'Bird', icon: 'fa-dove' },
+                    { tr: 'Balık', en: 'Fish', icon: 'fa-fish' },
+                    { tr: 'At', en: 'Horse', icon: 'fa-horse' }
+                ] 
+            }
+        ]
+    },
+    // ==========================================
+    // LEVEL A2: ELEMENTARY (Daily Life)
+    // ==========================================
+    {
+        title: "🏙️ A2: Daily Life",
+        cards: [
+            { 
+                id: 'a2_routine', title: "Daily Routine", topics: 5, level: "A2", bg: "bg-amber-100 dark:bg-amber-900/40", icon: "fa-clock", color: "text-amber-600", 
+                words: [
+                    { tr: 'Uyanmak', en: 'To wake up', icon: 'fa-sun' },
+                    { tr: 'Yüzünü yıkamak', en: 'Wash face', icon: 'fa-tint' },
+                    { tr: 'Kahvaltı etmek', en: 'Have breakfast', icon: 'fa-coffee' },
+                    { tr: 'Giyinmek', en: 'Get dressed', icon: 'fa-tshirt' },
+                    { tr: 'Çıkmak', en: 'To go out', icon: 'fa-door-open' }
+                ] 
+            },
+            { 
+                id: 'a2_clothes', title: "Clothing Store", topics: 5, level: "A2", bg: "bg-rose-100 dark:bg-rose-900/40", icon: "fa-shopping-bag", color: "text-rose-600", 
+                words: [
+                    { tr: 'Gömlek', en: 'Shirt', icon: 'fa-tshirt' },
+                    { tr: 'Pantolon', en: 'Pants', icon: 'fa-user' }, // approx
+                    { tr: 'Ayakkabı', en: 'Shoes', icon: 'fa-shoe-prints' },
+                    { tr: 'Mont', en: 'Coat', icon: 'fa-user-tie' },
+                    { tr: 'Şapka', en: 'Hat', icon: 'fa-hat-cowboy' }
+                ] 
+            },
+            { 
+                id: 'a2_city', title: "In the City", topics: 5, level: "A2", bg: "bg-gray-200 dark:bg-gray-700", icon: "fa-city", color: "text-gray-600", 
+                words: [
+                    { tr: 'Okul', en: 'School', icon: 'fa-school' },
+                    { tr: 'Hastane', en: 'Hospital', icon: 'fa-hospital' },
+                    { tr: 'Park', en: 'Park', icon: 'fa-tree' },
+                    { tr: 'Market', en: 'Market', icon: 'fa-shopping-cart' },
+                    { tr: 'Eczane', en: 'Pharmacy', icon: 'fa-pills' }
+                ] 
+            },
+            { 
+                id: 'a2_weather', title: "Weather Report", topics: 5, level: "A2", bg: "bg-sky-100 dark:bg-sky-900/40", icon: "fa-cloud-sun", color: "text-sky-600", 
+                words: [
+                    { tr: 'Güneşli', en: 'Sunny', icon: 'fa-sun' },
+                    { tr: 'Yağmurlu', en: 'Rainy', icon: 'fa-cloud-rain' },
+                    { tr: 'Karlı', en: 'Snowy', icon: 'fa-snowflake' },
+                    { tr: 'Rüzgarlı', en: 'Windy', icon: 'fa-wind' },
+                    { tr: 'Bulutlu', en: 'Cloudy', icon: 'fa-cloud' }
+                ] 
+            },
+            { 
+                id: 'a2_transport', title: "Transportation", topics: 5, level: "A2", bg: "bg-indigo-100 dark:bg-indigo-900/40", icon: "fa-bus", color: "text-indigo-600", 
+                words: [
+                    { tr: 'Otobüs', en: 'Bus', icon: 'fa-bus' },
+                    { tr: 'Taksi', en: 'Taxi', icon: 'fa-taxi' },
+                    { tr: 'Vapur', en: 'Ferry', icon: 'fa-ship' },
+                    { tr: 'Metro', en: 'Subway', icon: 'fa-subway' },
+                    { tr: 'Durak', en: 'Stop', icon: 'fa-map-marker-alt' }
+                ] 
+            },
+            { 
+                id: 'a2_body', title: "Human Body", topics: 5, level: "A2", bg: "bg-red-100 dark:bg-red-900/40", icon: "fa-child", color: "text-red-500", 
+                words: [
+                    { tr: 'Baş', en: 'Head', icon: 'fa-user' },
+                    { tr: 'Göz', en: 'Eye', icon: 'fa-eye' },
+                    { tr: 'El', en: 'Hand', icon: 'fa-hand-paper' },
+                    { tr: 'Ayak', en: 'Foot', icon: 'fa-shoe-prints' },
+                    { tr: 'Kalp', en: 'Heart', icon: 'fa-heart' }
+                ] 
+            }
+        ]
+    },
+
+    // ==========================================
+    // LEVEL B1: INTERMEDIATE (Work & Travel)
+    // ==========================================
+    {
+        title: "💼 B1: Work & Lifestyle",
+        cards: [
+            { 
+                id: 'b1_work', title: "Office Life", topics: 5, level: "B1", bg: "bg-slate-200 dark:bg-slate-700", icon: "fa-briefcase", color: "text-slate-600", 
+                words: [
+                    { tr: 'Toplantı', en: 'Meeting', icon: 'fa-handshake' },
+                    { tr: 'Müdür', en: 'Manager', icon: 'fa-user-tie' },
+                    { tr: 'Dosya', en: 'File', icon: 'fa-folder' },
+                    { tr: 'Bilgisayar', en: 'Computer', icon: 'fa-laptop' },
+                    { tr: 'Maaş', en: 'Salary', icon: 'fa-money-bill-wave' }
+                ] 
+            },
+            { 
+                id: 'b1_health', title: "Health & Wellness", topics: 5, level: "B1", bg: "bg-green-100 dark:bg-green-900/40", icon: "fa-heartbeat", color: "text-green-600", 
+                words: [
+                    { tr: 'Doktor', en: 'Doctor', icon: 'fa-user-md' },
+                    { tr: 'İlaç', en: 'Medicine', icon: 'fa-pills' },
+                    { tr: 'Ağrı', en: 'Pain', icon: 'fa-band-aid' },
+                    { tr: 'Randevu', en: 'Appointment', icon: 'fa-calendar-check' },
+                    { tr: 'Acil', en: 'Emergency', icon: 'fa-ambulance' }
+                ] 
+            },
+            { 
+                id: 'b1_travel', title: "Air Travel", topics: 5, level: "B1", bg: "bg-blue-100 dark:bg-blue-900/40", icon: "fa-plane-departure", color: "text-blue-600", 
+                words: [
+                    { tr: 'Pasaport', en: 'Passport', icon: 'fa-passport' },
+                    { tr: 'Bavul', en: 'Luggage', icon: 'fa-suitcase' },
+                    { tr: 'Uçuş', en: 'Flight', icon: 'fa-plane' },
+                    { tr: 'Gümrük', en: 'Customs', icon: 'fa-user-shield' },
+                    { tr: 'Kapı', en: 'Gate', icon: 'fa-door-open' }
+                ] 
+            },
+            { 
+                id: 'b1_hobbies', title: "Hobbies & Interests", topics: 5, level: "B1", bg: "bg-purple-100 dark:bg-purple-900/40", icon: "fa-guitar", color: "text-purple-600", 
+                words: [
+                    { tr: 'Müzik', en: 'Music', icon: 'fa-music' },
+                    { tr: 'Resim', en: 'Painting', icon: 'fa-palette' },
+                    { tr: 'Spor', en: 'Sports', icon: 'fa-basketball-ball' },
+                    { tr: 'Yüzme', en: 'Swimming', icon: 'fa-swimmer' },
+                    { tr: 'Dans', en: 'Dance', icon: 'fa-music' }
+                ] 
+            },
+            { 
+                id: 'b1_feelings', title: "Complex Emotions", topics: 5, level: "B1", bg: "bg-pink-100 dark:bg-pink-900/40", icon: "fa-theater-masks", color: "text-pink-600", 
+                words: [
+                    { tr: 'Heyecanlı', en: 'Excited', icon: 'fa-grin-stars' },
+                    { tr: 'Endişeli', en: 'Worried', icon: 'fa-flushed' },
+                    { tr: 'Şaşkın', en: 'Surprised', icon: 'fa-dizzy' },
+                    { tr: 'Korkmuş', en: 'Scared', icon: 'fa-ghost' },
+                    { tr: 'Gururlu', en: 'Proud', icon: 'fa-medal' }
+                ] 
+            },
+             { 
+                id: 'b1_tech', title: "Digital World", topics: 5, level: "B1", bg: "bg-zinc-200 dark:bg-zinc-700", icon: "fa-mobile-alt", color: "text-zinc-600", 
+                words: [
+                    { tr: 'İnternet', en: 'Internet', icon: 'fa-wifi' },
+                    { tr: 'Şifre', en: 'Password', icon: 'fa-key' },
+                    { tr: 'Mesaj', en: 'Message', icon: 'fa-envelope' },
+                    { tr: 'Uygulama', en: 'App', icon: 'fa-th-large' },
+                    { tr: 'Ekran', en: 'Screen', icon: 'fa-desktop' }
+                ] 
+            }
+        ]
+    },
+
+    // ==========================================
+    // LEVEL B2: UPPER INTERMEDIATE (Abstract)
+    // ==========================================
+    {
+        title: "🚀 B2: Advanced Concepts",
+        cards: [
+            { 
+                id: 'b2_environment', title: "Environment", topics: 5, level: "B2", bg: "bg-emerald-100 dark:bg-emerald-900/40", icon: "fa-leaf", color: "text-emerald-600", 
+                words: [
+                    { tr: 'Doğa', en: 'Nature', icon: 'fa-tree' },
+                    { tr: 'Kirlilik', en: 'Pollution', icon: 'fa-smog' },
+                    { tr: 'İklim', en: 'Climate', icon: 'fa-cloud-sun-rain' },
+                    { tr: 'Enerji', en: 'Energy', icon: 'fa-bolt' },
+                    { tr: 'Geri dönüşüm', en: 'Recycling', icon: 'fa-recycle' }
+                ] 
+            },
+            { 
+                id: 'b2_business', title: "Business Talk", topics: 5, level: "B2", bg: "bg-gray-200 dark:bg-gray-700", icon: "fa-chart-line", color: "text-gray-700", 
+                words: [
+                    { tr: 'Yatırım', en: 'Investment', icon: 'fa-chart-pie' },
+                    { tr: 'Piyasa', en: 'Market', icon: 'fa-balance-scale' },
+                    { tr: 'Hedef', en: 'Target', icon: 'fa-bullseye' },
+                    { tr: 'Rekabet', en: 'Competition', icon: 'fa-chess' },
+                    { tr: 'Gelişme', en: 'Development', icon: 'fa-layer-group' }
+                ] 
+            },
+            { 
+                id: 'b2_media', title: "Media & News", topics: 5, level: "B2", bg: "bg-red-100 dark:bg-red-900/40", icon: "fa-newspaper", color: "text-red-600", 
+                words: [
+                    { tr: 'Haber', en: 'News', icon: 'fa-bullhorn' },
+                    { tr: 'Gazete', en: 'Newspaper', icon: 'fa-newspaper' },
+                    { tr: 'Röportaj', en: 'Interview', icon: 'fa-microphone-alt' },
+                    { tr: 'Yayın', en: 'Broadcast', icon: 'fa-satellite-dish' },
+                    { tr: 'Gündem', en: 'Agenda', icon: 'fa-list-alt' }
+                ] 
+            },
+            { 
+                id: 'b2_law', title: "Law & Justice", topics: 5, level: "B2", bg: "bg-stone-200 dark:bg-stone-700", icon: "fa-gavel", color: "text-stone-600", 
+                words: [
+                    { tr: 'Adalet', en: 'Justice', icon: 'fa-balance-scale' },
+                    { tr: 'Kanun', en: 'Law', icon: 'fa-book' },
+                    { tr: 'Suç', en: 'Crime', icon: 'fa-mask' },
+                    { tr: 'Ceza', en: 'Punishment', icon: 'fa-lock' },
+                    { tr: 'Mahkeme', en: 'Court', icon: 'fa-landmark' }
+                ] 
+            },
+             { 
+                id: 'b2_culture', title: "Culture & Arts", topics: 5, level: "B2", bg: "bg-fuchsia-100 dark:bg-fuchsia-900/40", icon: "fa-masks-theater", color: "text-fuchsia-600", 
+                words: [
+                    { tr: 'Sanat', en: 'Art', icon: 'fa-paint-brush' },
+                    { tr: 'Tarih', en: 'History', icon: 'fa-hourglass-half' },
+                    { tr: 'Gelenek', en: 'Tradition', icon: 'fa-archway' },
+                    { tr: 'Sergi', en: 'Exhibition', icon: 'fa-image' },
+                    { tr: 'Edebiyat', en: 'Literature', icon: 'fa-book-open' }
+                ] 
+            }
+        ]
+    },
+
+    // ==========================================
+    // LEVEL C1: ADVANCED (Mastery)
+    // ==========================================
+    {
+        title: "🧠 C1: Mastery",
+        cards: [
+            { 
+                id: 'c1_politics', title: "Politics", topics: 5, level: "C1", bg: "bg-red-100 dark:bg-red-900/40", icon: "fa-landmark", color: "text-red-700", 
+                words: [
+                    { tr: 'Demokrasi', en: 'Democracy', icon: 'fa-vote-yea' },
+                    { tr: 'Hükümet', en: 'Government', icon: 'fa-building' },
+                    { tr: 'Seçim', en: 'Election', icon: 'fa-box-open' },
+                    { tr: 'Diplomasi', en: 'Diplomacy', icon: 'fa-handshake' },
+                    { tr: 'Muhalefet', en: 'Opposition', icon: 'fa-fist-raised' }
+                ] 
+            },
+            { 
+                id: 'c1_science', title: "Science & Space", topics: 5, level: "C1", bg: "bg-violet-100 dark:bg-violet-900/40", icon: "fa-atom", color: "text-violet-700", 
+                words: [
+                    { tr: 'Evren', en: 'Universe', icon: 'fa-infinity' },
+                    { tr: 'Deney', en: 'Experiment', icon: 'fa-flask' },
+                    { tr: 'Teori', en: 'Theory', icon: 'fa-brain' },
+                    { tr: 'Keşif', en: 'Discovery', icon: 'fa-search-location' },
+                    { tr: 'Gezegen', en: 'Planet', icon: 'fa-globe' }
+                ] 
+            },
+            { 
+                id: 'c1_philosophy', title: "Philosophy", topics: 5, level: "C1", bg: "bg-gray-200 dark:bg-gray-700", icon: "fa-lightbulb", color: "text-gray-700", 
+                words: [
+                    { tr: 'Gerçek', en: 'Reality', icon: 'fa-eye' },
+                    { tr: 'Mantık', en: 'Logic', icon: 'fa-puzzle-piece' },
+                    { tr: 'Etik', en: 'Ethics', icon: 'fa-balance-scale-right' },
+                    { tr: 'Bilinç', en: 'Consciousness', icon: 'fa-head-side-virus' },
+                    { tr: 'Varoluş', en: 'Existence', icon: 'fa-fingerprint' }
+                ] 
+            },
+            { 
+                id: 'c1_economy', title: "Global Economy", topics: 5, level: "C1", bg: "bg-emerald-100 dark:bg-emerald-900/40", icon: "fa-globe-americas", color: "text-emerald-700", 
+                words: [
+                    { tr: 'Enflasyon', en: 'Inflation', icon: 'fa-chart-line' },
+                    { tr: 'İhracat', en: 'Export', icon: 'fa-ship' },
+                    { tr: 'İthalat', en: 'Import', icon: 'fa-box' },
+                    { tr: 'Kalkınma', en: 'Development', icon: 'fa-city' },
+                    { tr: 'Bütçe', en: 'Budget', icon: 'fa-wallet' }
+                ] 
+            },
+            { 
+                id: 'c1_tech', title: "Future Tech", topics: 5, level: "C1", bg: "bg-cyan-100 dark:bg-cyan-900/40", icon: "fa-robot", color: "text-cyan-700", 
+                words: [
+                    { tr: 'Yapay Zeka', en: 'AI', icon: 'fa-microchip' },
+                    { tr: 'Yazılım', en: 'Software', icon: 'fa-code' },
+                    { tr: 'Veri', en: 'Data', icon: 'fa-database' },
+                    { tr: 'Sanal', en: 'Virtual', icon: 'fa-vr-cardboard' },
+                    { tr: 'Ağ', en: 'Network', icon: 'fa-project-diagram' }
+                ] 
+            }
+        ]
+    }
+];
         
         // --- NEW: Lesson Data ---
         const lessonData = [
@@ -4635,130 +5578,108 @@ this.checkDailyReset(); // Check/update streak and daily XP
             },
             // --- Navigation (RE-WRITTEN FOR STABILITY) ---
             // --- CORRECTED navigate() FUNCTION ---
-            navigate(pageId, options = {}) {
-                if (this.currentPage === pageId && !options.forceRender) return;
-                
-                if (this.fall.gameLoop) {
-                    clearInterval(this.fall.gameLoop);
-                    this.fall.gameLoop = null;
-                }
+            // --- REPLACE YOUR EXISTING navigate FUNCTION WITH THIS ---
+navigate(pageId, options = {}) {
+    if (this.currentPage === pageId && !options.forceRender) return;
+    
+    // 1. Clear any running games (like Word Fall)
+    if (this.fall && this.fall.gameLoop) {
+        clearInterval(this.fall.gameLoop);
+        this.fall.gameLoop = null;
+    }
 
-                this.currentPage = pageId;
-                const contentDiv = document.getElementById('main-content');
-                let templateId = `tpl-${pageId}`;
-                
-                // 1. Find the correct template ID
-                if (pageId.startsWith('lessons-') && pageId.includes('_l')) {
-                    templateId = 'tpl-lesson-detail';
-                } else if (pageId.startsWith('lessons-')) {
-                    templateId = 'tpl-lessons-sub';
-                } else if (pageId.startsWith('story-')) { 
-                    templateId = 'tpl-story-detail';
-                } else if (pageId.startsWith('stories-')) { 
-                    templateId = 'tpl-stories-sub';
-                } else if (pageId.startsWith('quiz-')) {
-                    templateId = 'tpl-quiz';
-                } else if (pageId === 'words-vocab') { // The A1, A2... hub
-                    templateId = 'tpl-words-vocab';
-                } else if (pageId === 'words-sentences') { // The Sentences hub
-                    templateId = 'tpl-words-sentences';
-                } else if (pageId.startsWith('words-') && pageId !== 'words-grammar') { // The final list page
-                    templateId = 'tpl-words-list'; 
-                }
-                
-                const template = document.getElementById(templateId);
-                
-                if (template) {
-                    // this.updateArabicToggle(); // Removed to prevent crash if function missing
-                    contentDiv.innerHTML = "";
-                    let contentNode = template.content.cloneNode(true);
-                    
-                    // 2. Post-processing for dynamic pages
-                    if (templateId === 'tpl-lessons-sub') {
-                        contentNode = this.createLessonListPage(contentNode, pageId.split('-')[1]);
-                    }
-                    if (templateId === 'tpl-lesson-detail') {
-                        contentNode = this.createLessonDetailPage(contentNode, pageId.split('-')[1]);
-                    }
-                    if (templateId === 'tpl-stories-sub') { 
-                        contentNode = this.createStorySubListPage(contentNode, pageId.split('-')[1]);
-                    }
-                    if (templateId === 'tpl-words-list') { 
-    // Changed function name below to match definition
-    contentNode = this.createWordLevelPage(contentNode, pageId.split('-')[1]);
-}
-                    if (pageId === 'converse-chat') {
-                        this.currentConverseScenario = options;
-                    }
-                    
-                    contentDiv.appendChild(contentNode);
-                    
-                    // 3. Page-specific initializers
-                    if (pageId === 'dashboard') this.initDashboard();
-                    if (templateId === 'tpl-lessons-sub') this.loadLessonList(pageId.split('-')[1]);
-                    if (templateId === 'tpl-lesson-detail') this.loadLessonDetail(pageId.split('-')[1]);
-                    
-                    // --- WORD HUB LOGIC ---
-                    if (pageId === 'words-vocab') {
-                        this.loadVocabHub();
-                    }
-                    if (pageId === 'words-sentences') {
-                        this.loadSentenceHub();
-                    }
-                    if (templateId === 'tpl-words-list') {
-                        // Use helper if available, or manual split
-                        
-                        let level, category;
-                        if (this.getParamsFromPageId) {
-                             [level, category] = this.getParamsFromPageId(pageId);
-                        } else {
-                             // Fallback if helper missing
-                             const params = pageId.split('-')[1];
-                             const parts = params.split('/');
-                             level = parts[0];
-                             category = parts[1];
-                        }
-                        this.loadWordList(category || 'everyday', level);
-                    }
-                    // --- END WORD HUB LOGIC ---
-                    
-                    // --- STORIES LOGIC ---
-                    // Removed: if (pageId === 'stories') this.loadStoryList();  <-- THIS WAS THE ERROR
-                    
-                    if (templateId === 'tpl-stories-sub') { 
-                        this.loadStorySubList(pageId.split('-')[1]);
-                    }
-                    if (pageId.startsWith('story-')) { 
-                        this.currentStoryId = pageId.split('-')[1];
-                        this.loadStoryDetail(this.currentStoryId);
-                    }
-                    // --- END STORIES LOGIC ---
+    this.currentPage = pageId;
+    const contentDiv = document.getElementById('main-content');
+    
+    // 2. Determine which Template to use
+    let templateId = `tpl-${pageId}`;
+    
+    // Special cases for sub-pages
+    if (pageId.startsWith('lessons-')) {
+        templateId = pageId.includes('_l') ? 'tpl-lesson-detail' : 'tpl-lessons-sub';
+    } else if (pageId.startsWith('story-')) { 
+        templateId = 'tpl-story-detail';
+    } else if (pageId.startsWith('stories-')) { 
+        templateId = 'tpl-stories-sub';
+    } else if (pageId.startsWith('words-') && pageId !== 'words-grammar') { 
+        templateId = 'tpl-words-list'; 
+    } else if (pageId.startsWith('quiz-')) {
+        templateId = 'tpl-quiz';
+    }
 
-                    if (pageId === 'words-grammar') this.loadGrammarList('pronouns');
-                    if (pageId === 'converse-scenarios') this.loadConverseScenarios();
-                    if (pageId === 'converse-chat') this.initChat();
-                    if (pageId.startsWith('quiz-')) this.initQuiz(pageId);
-                    if (pageId === 'challenges') this.navigate('challenges-quiz');
-                    if (pageId === 'games-match') this.initGameMatch();
-                    if (pageId === 'games-scramble') this.initGameScramble();
-                    if (pageId === 'games-hangman') this.initGameHangman();
-                    if (pageId === 'games-sentence') this.initGameSentence();
-                    if (pageId === 'games-search') this.initGameSearch();
-                    if (pageId === 'games-fall') this.initGameFall();
-                    if (pageId === 'games-listen') this.initGameListen();
-                    if (pageId === 'snap') this.initSnap();
-                    
-                    if (this.renderDashboardGoals) this.renderDashboardGoals(); 
-                } else {
-                    console.error(`Template not found: ${templateId}`);
-                    return;
-                }
+    // 3. Load the Template
+    const template = document.getElementById(templateId);
+    
+    if (template) {
+        contentDiv.innerHTML = "";
+        let contentNode = template.content.cloneNode(true);
+        
+        // --- DYNAMIC PAGE BUILDERS ---
+        
+        // Fix for Word Lists (A1, A2, Aviation...)
+        if (templateId === 'tpl-words-list') {
+            let level = pageId.split('-')[1];
+            // Ensure createWordLevelPage exists before calling
+            if (this.createWordLevelPage) {
+                contentNode = this.createWordLevelPage(contentNode, level);
+            }
+        }
 
-                if (this.updateUIStrings) this.updateUIStrings();
-                if (this.updateActiveNav) this.updateActiveNav();
-                
-                if(!options.forceRender) window.scrollTo(0,0);
-            },
+        // Fix for Lesson Lists
+        if (templateId === 'tpl-lessons-sub' && this.createLessonListPage) {
+            contentNode = this.createLessonListPage(contentNode, pageId.split('-')[1]);
+        }
+
+        // Fix for Story Lists
+        if (templateId === 'tpl-stories-sub' && this.createStorySubListPage) {
+            contentNode = this.createStorySubListPage(contentNode, pageId.split('-')[1]);
+        }
+        
+        contentDiv.appendChild(contentNode);
+        
+        // --- PAGE INITIALIZERS (The logic that runs AFTER page load) ---
+        
+        if (pageId === 'dashboard' && this.initDashboard) this.initDashboard();
+        
+        // *** THIS IS THE FIX FOR YOUR MAP ***
+        if (pageId === 'map' && this.renderExploreMap) this.renderExploreMap(); 
+        // ************************************
+
+        if (pageId === 'words-grammar' && this.loadGrammarList) this.loadGrammarList('pronouns');
+        if (pageId === 'converse-scenarios' && this.loadConverseScenarios) this.loadConverseScenarios();
+        if (pageId === 'converse-chat' && this.initChat) this.initChat();
+        if (pageId.startsWith('quiz-') && this.initQuiz) this.initQuiz(pageId);
+        
+        // Games
+        if (pageId === 'games-match' && this.initGameMatch) this.initGameMatch();
+        if (pageId === 'games-scramble' && this.initGameScramble) this.initGameScramble();
+        if (pageId === 'games-hangman' && this.initGameHangman) this.initGameHangman();
+        if (pageId === 'games-sentence' && this.initGameSentence) this.initGameSentence();
+        if (pageId === 'games-search' && this.initGameSearch) this.initGameSearch();
+        if (pageId === 'games-fall' && this.initGameFall) this.initGameFall();
+        if (pageId === 'games-listen' && this.initGameListen) this.initGameListen();
+        if (pageId === 'snap' && this.initSnap) this.initSnap();
+        
+        // Specific Loaders
+        if (templateId === 'tpl-words-list' && this.loadWordList) {
+             let level = pageId.split('-')[1];
+             let defaultCat = (level === 'aviation') ? 'airport' : 'everyday';
+             this.loadWordList(defaultCat, level);
+        }
+        if (templateId === 'tpl-lessons-sub' && this.loadLessonList) this.loadLessonList(pageId.split('-')[1]);
+        if (templateId === 'tpl-lesson-detail' && this.loadLessonDetail) this.loadLessonDetail(pageId.split('-')[1]);
+        if (templateId === 'tpl-stories-sub' && this.loadStorySubList) this.loadStorySubList(pageId.split('-')[1]);
+        if (pageId.startsWith('story-') && this.loadStoryDetail) this.loadStoryDetail(pageId.split('-')[1]);
+
+    } else {
+        console.error(`Template not found: ${templateId}`);
+    }
+
+    if (this.updateUIStrings) this.updateUIStrings();
+    if (this.updateActiveNav) this.updateActiveNav();
+    if(!options.forceRender) window.scrollTo(0,0);
+},
+            
             // ===== NEW: AI EXAMPLE SENTENCE =====
             async getAIExample(word) {
                 // Show a loading mesavge
@@ -5232,6 +6153,483 @@ checkDailyReset() {
 
                 this.renderDashboardGoals(); // Render new streak/progress
             },
+            // --- SNIPPET 4: LOGIC (Place inside app object) ---
+
+// 1. RENDER MAP GRID
+// --- PASTE THIS INSIDE 'app' OBJECT ---
+    
+    // 1. Render the Map Grid
+    // --- SNIPPET 2: UPDATED MAP RENDERER (With Completion Check) ---
+renderExploreMap() {
+    const container = document.getElementById('explore-container');
+    if (!container) return;
+    container.innerHTML = "";
+    
+    // Load progress if not already loaded
+    const savedProgress = JSON.parse(localStorage.getItem('turkish_map_progress') || '[]');
+    
+    mapData.forEach(section => {
+        const sectionHTML = document.createElement('div');
+        sectionHTML.innerHTML = `<h2 class="text-2xl font-bold mb-4 px-2 flex items-center">${section.title}</h2>`;
+        
+        const grid = document.createElement('div');
+        grid.className = "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-2";
+        
+        section.cards.forEach(card => {
+            const isCompleted = savedProgress.includes(card.id);
+            const cardEl = document.createElement('div');
+            // Add 'completed' class if finished
+            cardEl.className = `explore-card bg-white dark:bg-slate-800 shadow-lg ${isCompleted ? 'completed' : ''}`;
+            cardEl.onclick = () => this.startMapLesson(card);
+            
+            let badgeClass = 'level-beginner';
+            if (card.level === 'Intermediate') badgeClass = 'level-intermediate';
+            if (card.level === 'Advanced') badgeClass = 'level-advanced';
+
+            cardEl.innerHTML = `
+                <div class="explore-icon-container ${card.bg}">
+                    <i class="fas ${card.icon} text-6xl ${card.color} transition-transform duration-500 group-hover:scale-110"></i>
+                </div>
+                <div class="p-4">
+                    <h3 class="font-bold text-lg mb-1 truncate">${card.title}</h3>
+                    <div class="flex justify-between items-center mt-2">
+                        <p class="text-xs text-gray-500 font-semibold">${card.topics} Words</p>
+                        <span class="level-badge ${badgeClass}">${card.level}</span>
+                    </div>
+                </div>
+            `;
+            grid.appendChild(cardEl);
+        });
+        
+        sectionHTML.appendChild(grid);
+        container.appendChild(sectionHTML);
+    });
+},
+
+    // 2. Start Lesson
+    // --- SNIPPET 4: ADVANCED GAME LOGIC (Replace existing functions) ---
+
+// --- REPLACEMENT: RANDOMIZED LESSON ENGINE ---
+ 
+// --- SNIPPET 2: ILLUSTRATED LESSON ENGINE (Replace existing functions) ---
+
+// 1. SMART IMAGE GENERATOR
+getVisualURL(word) {
+    // Cleans the word for the URL (e.g., "A cat" -> "cat")
+    const cleanWord = word.toLowerCase().replace(/a |an |the /g, '');
+    // Uses Pollinations AI to generate a "Duolingo-style" vector image on the fly
+    return `https://image.pollinations.ai/prompt/minimalist%20flat%20vector%20illustration%20of%20${cleanWord}%20isolated%20on%20white%20background?width=300&height=300&nologo=true&seed=${cleanWord.length}`;
+},
+
+// 2. DISTRACTOR HELPER
+getDistractors(correctWord, allWords, count) {
+    if (!allWords) return [];
+    return allWords
+        .filter(w => w.tr !== correctWord.tr)
+        .sort(() => 0.5 - Math.random())
+        .slice(0, count);
+},
+
+// 3. START LESSON (Now with Images!)
+startMapLesson(cardData) {
+    if (!cardData) return;
+    
+    this.currentLesson = {
+        topic: cardData,
+        queue: [],
+        index: 0,
+        score: 0,
+        isProcessing: false
+    };
+
+    // Batch words in groups of 3 for better learning flow
+    const chunkSize = 3;
+    for (let i = 0; i < cardData.words.length; i += chunkSize) {
+        const batchWords = cardData.words.slice(i, i + chunkSize);
+        let batchIntros = [];
+        let batchGames = [];
+
+        batchWords.forEach(item => {
+            // Intro (Learn with Image)
+            batchIntros.push({ type: 'intro', data: item });
+
+            // Game 1: Pick the right Image (Visual)
+            const distVisual = this.getDistractors(item, cardData.words, 3);
+            const optsVisual = [item, ...distVisual].sort(() => 0.5 - Math.random());
+            batchGames.push({ type: 'pick_image', data: item, options: optsVisual });
+
+            // Game 2: Pick the right Word (Text)
+            const distWord = this.getDistractors(item, cardData.words, 3);
+            const optsWord = [item, ...distWord].sort(() => 0.5 - Math.random());
+            batchGames.push({ type: 'pick_word', data: item, options: optsWord });
+            
+            // Game 3: Listening (Audio -> Image)
+            const distListen = this.getDistractors(item, cardData.words, 3);
+            const optsListen = [item, ...distListen].sort(() => 0.5 - Math.random());
+            batchGames.push({ type: 'listen_match', data: item, options: optsListen });
+        });
+
+        batchGames.sort(() => 0.5 - Math.random()); // Shuffle games
+        this.currentLesson.queue.push(...batchIntros, ...batchGames);
+    }
+
+    const template = document.getElementById('tpl-map-lesson');
+    const clone = template.content.cloneNode(true);
+    document.body.appendChild(clone);
+    this.renderLessonCard();
+},
+
+// 4. RENDER CARD (With Images)
+renderLessonCard() {
+    if (!this.currentLesson || !this.currentLesson.queue[this.currentLesson.index]) {
+        this.finishLesson();
+        return;
+    }
+
+    const step = this.currentLesson.queue[this.currentLesson.index];
+    const item = step.data;
+    this.currentLesson.isProcessing = false;
+    
+    // UI Setup
+    const progressBar = document.getElementById('lesson-progress-bar');
+    const scoreDisplay = document.getElementById('lesson-score-display');
+    const cardContainer = document.getElementById('lesson-card-container');
+    const optionsArea = document.getElementById('lesson-options-area');
+    const continueBtn = document.getElementById('lesson-continue-btn');
+    const feedbackEl = document.getElementById('lesson-feedback');
+
+    if (progressBar) progressBar.style.width = `${((this.currentLesson.index) / this.currentLesson.queue.length) * 100}%`;
+    if (scoreDisplay) scoreDisplay.innerText = this.currentLesson.score;
+    
+    if (continueBtn) continueBtn.classList.add('hidden');
+    if (feedbackEl) feedbackEl.classList.add('hidden');
+    if (optionsArea) optionsArea.innerHTML = "";
+    if (cardContainer) cardContainer.innerHTML = "";
+    
+    const imgUrl = this.getVisualURL(item.en);
+    let html = "";
+
+    // === 1. TEACHING CARD (Big Image) ===
+    if (step.type === 'intro') {
+        this.speak(item.tr, 'tr-TR');
+        html = `
+            <div class="w-full h-full bg-white dark:bg-slate-800 rounded-3xl shadow-xl flex flex-col items-center justify-center p-6 animate-popIn border-b-8 border-blue-500">
+                <div class="w-48 h-48 mb-6 lesson-image-container shadow-inner">
+                    <img src="${imgUrl}" class="lesson-image" alt="${item.en}" onerror="this.src='https://placehold.co/200x200?text=${item.en}'">
+                </div>
+                <h2 class="text-5xl font-bold mb-2 text-gray-800 dark:text-white">${item.tr}</h2>
+                <p class="text-2xl text-gray-500 font-medium">${item.en}</p>
+                <button onclick="app.speak('${item.tr}', 'tr-TR')" class="mt-4 p-3 bg-slate-100 dark:bg-slate-700 rounded-full text-blue-500"><i class="fas fa-volume-up text-2xl"></i></button>
+            </div>
+        `;
+        if (continueBtn) continueBtn.classList.remove('hidden');
+    } 
+    
+    // === 2. PICK IMAGE (Grid of Images) ===
+    else if (step.type === 'pick_image') {
+        this.speak(item.tr, 'tr-TR');
+        html = `
+            <div class="w-full bg-white dark:bg-slate-800 rounded-3xl shadow-xl p-6 text-center animate-popIn mb-4">
+                <h2 class="text-4xl font-black text-gray-800 dark:text-white">${item.tr}</h2>
+                <button onclick="app.speak('${item.tr}', 'tr-TR')" class="text-blue-400 mt-2"><i class="fas fa-volume-up"></i></button>
+            </div>
+        `;
+        
+        let optionsHtml = `<div class="grid grid-cols-2 gap-3 w-full">`;
+        step.options.forEach(opt => {
+            optionsHtml += `
+                <button onclick="app.checkLessonAnswer('${opt.tr}', this)" class="lesson-option-btn image-mode bg-white dark:bg-slate-800">
+                    <div class="lesson-image-container mb-2 h-24">
+                        <img src="${this.getVisualURL(opt.en)}" class="lesson-image" loading="lazy">
+                    </div>
+                    <!-- Hidden text for accessibility/debugging -->
+                    <span class="hidden">${opt.tr}</span> 
+                </button>
+            `;
+        });
+        optionsHtml += `</div>`;
+        if (optionsArea) optionsArea.innerHTML = optionsHtml;
+    }
+
+    // === 3. LISTEN & MATCH (Audio -> Image Grid) ===
+    else if (step.type === 'listen_match') {
+        this.speak(item.tr, 'tr-TR');
+        html = `
+            <div class="w-full bg-white dark:bg-slate-800 rounded-3xl shadow-xl p-8 text-center animate-popIn mb-4">
+                <button onclick="app.speak('${item.tr}', 'tr-TR')" class="w-24 h-24 bg-blue-500 rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition mx-auto mb-2">
+                    <i class="fas fa-volume-up text-5xl text-white"></i>
+                </button>
+                <p class="text-gray-400 font-bold">What do you hear?</p>
+            </div>
+        `;
+        
+        let optionsHtml = `<div class="grid grid-cols-2 gap-3 w-full">`;
+        step.options.forEach(opt => {
+            optionsHtml += `
+                <button onclick="app.checkLessonAnswer('${opt.tr}', this)" class="lesson-option-btn image-mode bg-white dark:bg-slate-800">
+                    <div class="lesson-image-container h-24">
+                        <img src="${this.getVisualURL(opt.en)}" class="lesson-image" loading="lazy">
+                    </div>
+                </button>
+            `;
+        });
+        optionsHtml += `</div>`;
+        if (optionsArea) optionsArea.innerHTML = optionsHtml;
+    }
+
+    // === 4. PICK WORD (Image -> Text Grid) ===
+    else if (step.type === 'pick_word') {
+        html = `
+            <div class="w-full bg-white dark:bg-slate-800 rounded-3xl shadow-xl p-6 flex flex-col items-center animate-popIn mb-4">
+                <div class="w-32 h-32 lesson-image-container shadow-md mb-2">
+                    <img src="${imgUrl}" class="lesson-image">
+                </div>
+                <p class="text-gray-400 font-bold uppercase text-sm">What is this?</p>
+            </div>
+        `;
+
+        let optionsHtml = `<div class="grid grid-cols-2 gap-3 w-full">`;
+        step.options.forEach(opt => {
+            optionsHtml += `
+                <button onclick="app.checkLessonAnswer('${opt.tr}', this)" class="lesson-option-btn h-20 bg-white dark:bg-slate-800 hover:bg-slate-50">
+                    <span class="text-xl font-bold text-gray-700 dark:text-gray-200">${opt.tr}</span>
+                </button>
+            `;
+        });
+        optionsHtml += `</div>`;
+        if (optionsArea) optionsArea.innerHTML = optionsHtml;
+    }
+
+    if (cardContainer) cardContainer.innerHTML = html;
+},
+
+// 5. CHECK ANSWER
+checkLessonAnswer(selectedVal, btnElement) {
+    if (this.currentLesson.isProcessing) return;
+    this.currentLesson.isProcessing = true;
+
+    const step = this.currentLesson.queue[this.currentLesson.index];
+    const isCorrect = (selectedVal === step.data.tr);
+
+    const feedbackEl = document.getElementById('lesson-feedback');
+    if (feedbackEl) {
+        const textEl = feedbackEl.querySelector('.feedback-text');
+        feedbackEl.classList.remove('hidden');
+        
+        if (isCorrect) {
+            textEl.innerText = "Correct!";
+            textEl.className = "feedback-text inline-block bg-white dark:bg-slate-800 px-8 py-4 rounded-2xl shadow-2xl border-b-4 border-green-500 text-green-600 font-bold text-2xl";
+            if(btnElement) btnElement.classList.add('correct');
+            this.playSound('correct');
+            this.currentLesson.score += 10;
+            setTimeout(() => this.nextLessonStep(), 1000);
+        } else {
+            textEl.innerText = "Wrong!";
+            textEl.className = "feedback-text inline-block bg-white dark:bg-slate-800 px-8 py-4 rounded-2xl shadow-2xl border-b-4 border-red-500 text-red-600 font-bold text-2xl";
+            if(btnElement) btnElement.classList.add('wrong');
+            this.playSound('wrong');
+            
+            // Auto-highlight correct answer
+            document.querySelectorAll('.lesson-option-btn').forEach(btn => {
+                // Check if button text matches OR if button image source matches correct word
+                if (btn.innerText.includes(step.data.tr) || btn.innerHTML.includes(this.getVisualURL(step.data.en))) {
+                    btn.classList.add('correct');
+                }
+            });
+            setTimeout(() => this.nextLessonStep(), 1500);
+        }
+    }
+},
+
+    nextLessonStep() {
+        this.currentLesson.index++;
+        if(this.currentLesson.index >= this.currentLesson.queue.length) {
+            document.getElementById('lesson-complete-screen').classList.remove('hidden');
+            this.playSound('win');
+        } else {
+            this.renderLessonCard();
+        }
+    },
+
+    // --- SNIPPET 3: SAVE PROGRESS LOGIC ---
+finishLesson() {
+    // 1. Remove Modal
+    const modal = document.getElementById('lesson-complete-screen');
+    if(modal && modal.parentElement) modal.parentElement.remove();
+    
+    // 2. Save Progress
+    if (this.currentLesson && this.currentLesson.topic) {
+        const topicId = this.currentLesson.topic.id;
+        let progress = JSON.parse(localStorage.getItem('turkish_map_progress') || '[]');
+        if (!progress.includes(topicId)) {
+            progress.push(topicId);
+            localStorage.setItem('turkish_map_progress', JSON.stringify(progress));
+        }
+    }
+    
+    // 3. Reward & Refresh
+    this.addXP(50);
+    this.playSound('win');
+    this.renderExploreMap(); // Refresh map to show new checkmark
+},
+    
+    quitLesson() {
+        if(confirm("Quit?")) document.getElementById('lesson-progress-bar').closest('.fixed').remove();
+    },
+
+// 3. RENDER LESSON CARD (With Large Icons)
+renderLessonCard() {
+    const cardContainer = document.getElementById('lesson-card-container');
+    const step = this.currentLesson.queue[this.currentLesson.index];
+    const item = step.data;
+    
+    // Update Progress
+    const progress = ((this.currentLesson.index) / this.currentLesson.queue.length) * 100;
+    document.getElementById('lesson-progress-bar').style.width = `${progress}%`;
+    document.getElementById('lesson-score-display').innerText = this.currentLesson.score;
+    
+    // Reset UI
+    document.getElementById('lesson-continue-btn').classList.add('hidden');
+    document.getElementById('lesson-choice-btns').classList.add('hidden');
+    document.getElementById('lesson-feedback').classList.add('hidden');
+    
+    let html = "";
+
+    // --- INTRO CARD (TEACH) ---
+    if (step.type === 'intro') {
+        this.speak(item.tr, 'tr-TR');
+        html = `
+            <div class="w-full h-full bg-white dark:bg-slate-800 rounded-3xl shadow-2xl flex flex-col items-center justify-center p-6 text-center border-b-8 border-blue-500 animate-popIn">
+                <div class="w-40 h-40 mb-8 bg-blue-50 dark:bg-slate-700 rounded-full flex items-center justify-center shadow-inner">
+                    <i class="fas ${item.icon} text-8xl text-blue-500"></i>
+                </div>
+                <h2 class="text-5xl font-bold mb-3 text-gray-800 dark:text-white">${item.tr}</h2>
+                <p class="text-2xl text-gray-500 font-medium mb-6">${item.en}</p>
+                <button onclick="app.speak('${item.tr}', 'tr-TR')" class="p-4 bg-slate-100 dark:bg-slate-700 rounded-full hover:scale-110 transition shadow-md text-blue-500">
+                    <i class="fas fa-volume-up text-2xl"></i>
+                </button>
+            </div>
+        `;
+        setTimeout(() => document.getElementById('lesson-continue-btn').classList.remove('hidden'), 600);
+    } 
+    // --- QUIZ CARD (TEST) ---
+    else if (step.type === 'quiz') {
+        html = `
+            <div class="w-full h-full bg-white dark:bg-slate-800 rounded-3xl shadow-2xl flex flex-col items-center justify-center p-6 text-center border-b-8 border-purple-500 animate-popIn">
+                <p class="text-gray-400 text-xl mb-6 font-bold uppercase tracking-wide">Is this correct?</p>
+                <div class="mb-8">
+                    <i class="fas ${item.icon} text-9xl text-gray-300"></i>
+                </div>
+                <div class="mb-2">
+                    <span class="text-gray-400 text-lg">Turkish:</span>
+                    <h2 class="text-4xl font-bold text-gray-800 dark:text-white">${item.tr}</h2>
+                </div>
+                <div class="mt-2">
+                    <span class="text-gray-400 text-lg">English:</span>
+                    <p class="text-3xl text-purple-500 font-bold">${item.en}</p>
+                </div>
+            </div>
+        `;
+        document.getElementById('lesson-choice-btns').classList.remove('hidden');
+    }
+    cardContainer.innerHTML = html;
+},
+
+// 4. CHECK ANSWER LOGIC
+checkLessonAnswer(isTrue) {
+    // For demo purposes, we assume the presented pair is always correct (true)
+    // In a full app, you would randomly swap labels to make "False" valid.
+    const isCorrect = true; 
+    
+    const feedbackEl = document.getElementById('lesson-feedback');
+    const textEl = feedbackEl.querySelector('.feedback-text');
+    
+    feedbackEl.classList.remove('hidden');
+    
+    if (isCorrect) {
+        this.playSound('correct');
+        this.currentLesson.score += 10;
+        textEl.innerText = "Correct!";
+        textEl.className = "inline-block bg-white dark:bg-slate-800 px-8 py-4 rounded-2xl shadow-2xl border-b-4 border-green-500 font-bold text-2xl feedback-text text-green-500";
+        setTimeout(() => this.nextLessonStep(), 1000);
+    }
+},
+
+nextLessonStep() {
+    this.currentLesson.index++;
+    if (this.currentLesson.index >= this.currentLesson.queue.length) {
+        document.getElementById('lesson-complete-screen').classList.remove('hidden');
+        this.playSound('win');
+    } else {
+        this.renderLessonCard();
+    }
+},
+
+finishLesson() {
+    const modal = document.getElementById('lesson-complete-screen').parentElement;
+    modal.remove();
+    this.addXP(50);
+},
+
+quitLesson() {
+    if(confirm("Quit? Progress will be lost.")) {
+        document.getElementById('lesson-progress-bar').closest('.fixed').remove();
+    }
+},
+
+// 5. BETTER SOUND ENGINE (Chords)
+playSound(type) {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContext) return;
+    const ctx = new AudioContext();
+    const now = ctx.currentTime;
+
+    if (type === 'correct') {
+        // Happy Major Chord (C-E-G)
+        [523.25, 659.25, 783.99].forEach((freq, i) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.value = freq;
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            const start = now + (i * 0.05);
+            osc.start(start);
+            gain.gain.setValueAtTime(0, start);
+            gain.gain.linearRampToValueAtTime(0.1, start + 0.05);
+            gain.gain.exponentialRampToValueAtTime(0.001, start + 0.5);
+            osc.stop(start + 0.5);
+        });
+    } else if (type === 'win') {
+        // Victory Arpeggio
+        [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.value = freq;
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            const start = now + (i * 0.1);
+            osc.start(start);
+            gain.gain.setValueAtTime(0.1, start);
+            gain.gain.exponentialRampToValueAtTime(0.001, start + 0.8);
+            osc.stop(start + 0.8);
+        });
+    } else {
+        // Soft Thud (Error)
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(150, now);
+        osc.frequency.exponentialRampToValueAtTime(50, now + 0.3);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        gain.gain.setValueAtTime(0.1, now);
+        gain.gain.linearRampToValueAtTime(0.001, now + 0.3);
+        osc.stop(now + 0.3);
+    }
+},
             
             renderDashboardGoals() {
                 // Update header streak
@@ -6558,6 +7956,7 @@ checkGameFall(answer, input) {
                 `).join('');
             },
             
+            
             // Note: The logic for selection (handleCellClick, checkWord) is very complex
             // and would require hundreds of lines. For now, this template allows the user
             // to see the potential of the game.
@@ -6797,6 +8196,257 @@ checkGameFall(answer, input) {
             }
             this.toggleMenu('settings-menu');
         },
+        // --- SNIPPET 3: HELPER (Paste inside 'app' object) ---
+getDistractors(correctWord, allWords, count) {
+    // Filter out the correct word, shuffle, and pick 'count' items
+    return allWords
+        .filter(w => w.tr !== correctWord.tr)
+        .sort(() => 0.5 - Math.random())
+        .slice(0, count);
+},
+getDistractors(correctWord, allWords, count) {
+    if (!allWords) return [];
+    // Filter out the correct word, shuffle, and pick 'count' items
+    return allWords
+        .filter(w => w.tr !== correctWord.tr)
+        .sort(() => 0.5 - Math.random())
+        .slice(0, count);
+},
+
+// 2. START LESSON (Generates the Game Queue)
+// --- SNIPPET 4: BIGGER LESSONS & NEW GAME MODES ---
+
+// --- REPLACEMENT: RANDOMIZED LESSON ENGINE ---
+
+// --- SNIPPET 2: ILLUSTRATED LESSON ENGINE (Replace existing functions) ---
+
+// 1. SMART IMAGE GENERATOR
+getVisualURL(word) {
+    // Cleans the word for the URL (e.g., "A cat" -> "cat")
+    const cleanWord = word.toLowerCase().replace(/a |an |the /g, '');
+    // Uses Pollinations AI to generate a "Duolingo-style" vector image on the fly
+    return `https://image.pollinations.ai/prompt/minimalist%20flat%20vector%20illustration%20of%20${cleanWord}%20isolated%20on%20white%20background?width=300&height=300&nologo=true&seed=${cleanWord.length}`;
+},
+
+// 2. DISTRACTOR HELPER
+getDistractors(correctWord, allWords, count) {
+    if (!allWords) return [];
+    return allWords
+        .filter(w => w.tr !== correctWord.tr)
+        .sort(() => 0.5 - Math.random())
+        .slice(0, count);
+},
+
+// 3. START LESSON (Now with Images!)
+startMapLesson(cardData) {
+    if (!cardData) return;
+    
+    this.currentLesson = {
+        topic: cardData,
+        queue: [],
+        index: 0,
+        score: 0,
+        isProcessing: false
+    };
+
+    // Batch words in groups of 3 for better learning flow
+    const chunkSize = 3;
+    for (let i = 0; i < cardData.words.length; i += chunkSize) {
+        const batchWords = cardData.words.slice(i, i + chunkSize);
+        let batchIntros = [];
+        let batchGames = [];
+
+        batchWords.forEach(item => {
+            // Intro (Learn with Image)
+            batchIntros.push({ type: 'intro', data: item });
+
+            // Game 1: Pick the right Image (Visual)
+            const distVisual = this.getDistractors(item, cardData.words, 3);
+            const optsVisual = [item, ...distVisual].sort(() => 0.5 - Math.random());
+            batchGames.push({ type: 'pick_image', data: item, options: optsVisual });
+
+            // Game 2: Pick the right Word (Text)
+            const distWord = this.getDistractors(item, cardData.words, 3);
+            const optsWord = [item, ...distWord].sort(() => 0.5 - Math.random());
+            batchGames.push({ type: 'pick_word', data: item, options: optsWord });
+            
+            // Game 3: Listening (Audio -> Image)
+            const distListen = this.getDistractors(item, cardData.words, 3);
+            const optsListen = [item, ...distListen].sort(() => 0.5 - Math.random());
+            batchGames.push({ type: 'listen_match', data: item, options: optsListen });
+        });
+
+        batchGames.sort(() => 0.5 - Math.random()); // Shuffle games
+        this.currentLesson.queue.push(...batchIntros, ...batchGames);
+    }
+
+    const template = document.getElementById('tpl-map-lesson');
+    const clone = template.content.cloneNode(true);
+    document.body.appendChild(clone);
+    this.renderLessonCard();
+},
+
+// 4. RENDER CARD (With Images)
+renderLessonCard() {
+    if (!this.currentLesson || !this.currentLesson.queue[this.currentLesson.index]) {
+        this.finishLesson();
+        return;
+    }
+
+    const step = this.currentLesson.queue[this.currentLesson.index];
+    const item = step.data;
+    this.currentLesson.isProcessing = false;
+    
+    // UI Setup
+    const progressBar = document.getElementById('lesson-progress-bar');
+    const scoreDisplay = document.getElementById('lesson-score-display');
+    const cardContainer = document.getElementById('lesson-card-container');
+    const optionsArea = document.getElementById('lesson-options-area');
+    const continueBtn = document.getElementById('lesson-continue-btn');
+    const feedbackEl = document.getElementById('lesson-feedback');
+
+    if (progressBar) progressBar.style.width = `${((this.currentLesson.index) / this.currentLesson.queue.length) * 100}%`;
+    if (scoreDisplay) scoreDisplay.innerText = this.currentLesson.score;
+    
+    if (continueBtn) continueBtn.classList.add('hidden');
+    if (feedbackEl) feedbackEl.classList.add('hidden');
+    if (optionsArea) optionsArea.innerHTML = "";
+    if (cardContainer) cardContainer.innerHTML = "";
+    
+    const imgUrl = this.getVisualURL(item.en);
+    let html = "";
+
+    // === 1. TEACHING CARD (Big Image) ===
+    if (step.type === 'intro') {
+        this.speak(item.tr, 'tr-TR');
+        html = `
+            <div class="w-full h-full bg-white dark:bg-slate-800 rounded-3xl shadow-xl flex flex-col items-center justify-center p-6 animate-popIn border-b-8 border-blue-500">
+                <div class="w-48 h-48 mb-6 lesson-image-container shadow-inner">
+                    <img src="${imgUrl}" class="lesson-image" alt="${item.en}" onerror="this.src='https://placehold.co/200x200?text=${item.en}'">
+                </div>
+                <h2 class="text-5xl font-bold mb-2 text-gray-800 dark:text-white">${item.tr}</h2>
+                <p class="text-2xl text-gray-500 font-medium">${item.en}</p>
+                <button onclick="app.speak('${item.tr}', 'tr-TR')" class="mt-4 p-3 bg-slate-100 dark:bg-slate-700 rounded-full text-blue-500"><i class="fas fa-volume-up text-2xl"></i></button>
+            </div>
+        `;
+        if (continueBtn) continueBtn.classList.remove('hidden');
+    } 
+    
+    // === 2. PICK IMAGE (Grid of Images) ===
+    else if (step.type === 'pick_image') {
+        this.speak(item.tr, 'tr-TR');
+        html = `
+            <div class="w-full bg-white dark:bg-slate-800 rounded-3xl shadow-xl p-6 text-center animate-popIn mb-4">
+                <h2 class="text-4xl font-black text-gray-800 dark:text-white">${item.tr}</h2>
+                <button onclick="app.speak('${item.tr}', 'tr-TR')" class="text-blue-400 mt-2"><i class="fas fa-volume-up"></i></button>
+            </div>
+        `;
+        
+        let optionsHtml = `<div class="grid grid-cols-2 gap-3 w-full">`;
+        step.options.forEach(opt => {
+            optionsHtml += `
+                <button onclick="app.checkLessonAnswer('${opt.tr}', this)" class="lesson-option-btn image-mode bg-white dark:bg-slate-800">
+                    <div class="lesson-image-container mb-2 h-24">
+                        <img src="${this.getVisualURL(opt.en)}" class="lesson-image" loading="lazy">
+                    </div>
+                    <!-- Hidden text for accessibility/debugging -->
+                    <span class="hidden">${opt.tr}</span> 
+                </button>
+            `;
+        });
+        optionsHtml += `</div>`;
+        if (optionsArea) optionsArea.innerHTML = optionsHtml;
+    }
+
+    // === 3. LISTEN & MATCH (Audio -> Image Grid) ===
+    else if (step.type === 'listen_match') {
+        this.speak(item.tr, 'tr-TR');
+        html = `
+            <div class="w-full bg-white dark:bg-slate-800 rounded-3xl shadow-xl p-8 text-center animate-popIn mb-4">
+                <button onclick="app.speak('${item.tr}', 'tr-TR')" class="w-24 h-24 bg-blue-500 rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition mx-auto mb-2">
+                    <i class="fas fa-volume-up text-5xl text-white"></i>
+                </button>
+                <p class="text-gray-400 font-bold">What do you hear?</p>
+            </div>
+        `;
+        
+        let optionsHtml = `<div class="grid grid-cols-2 gap-3 w-full">`;
+        step.options.forEach(opt => {
+            optionsHtml += `
+                <button onclick="app.checkLessonAnswer('${opt.tr}', this)" class="lesson-option-btn image-mode bg-white dark:bg-slate-800">
+                    <div class="lesson-image-container h-24">
+                        <img src="${this.getVisualURL(opt.en)}" class="lesson-image" loading="lazy">
+                    </div>
+                </button>
+            `;
+        });
+        optionsHtml += `</div>`;
+        if (optionsArea) optionsArea.innerHTML = optionsHtml;
+    }
+
+    // === 4. PICK WORD (Image -> Text Grid) ===
+    else if (step.type === 'pick_word') {
+        html = `
+            <div class="w-full bg-white dark:bg-slate-800 rounded-3xl shadow-xl p-6 flex flex-col items-center animate-popIn mb-4">
+                <div class="w-32 h-32 lesson-image-container shadow-md mb-2">
+                    <img src="${imgUrl}" class="lesson-image">
+                </div>
+                <p class="text-gray-400 font-bold uppercase text-sm">What is this?</p>
+            </div>
+        `;
+
+        let optionsHtml = `<div class="grid grid-cols-2 gap-3 w-full">`;
+        step.options.forEach(opt => {
+            optionsHtml += `
+                <button onclick="app.checkLessonAnswer('${opt.tr}', this)" class="lesson-option-btn h-20 bg-white dark:bg-slate-800 hover:bg-slate-50">
+                    <span class="text-xl font-bold text-gray-700 dark:text-gray-200">${opt.tr}</span>
+                </button>
+            `;
+        });
+        optionsHtml += `</div>`;
+        if (optionsArea) optionsArea.innerHTML = optionsHtml;
+    }
+
+    if (cardContainer) cardContainer.innerHTML = html;
+},
+
+// 5. CHECK ANSWER
+checkLessonAnswer(selectedVal, btnElement) {
+    if (this.currentLesson.isProcessing) return;
+    this.currentLesson.isProcessing = true;
+
+    const step = this.currentLesson.queue[this.currentLesson.index];
+    const isCorrect = (selectedVal === step.data.tr);
+
+    const feedbackEl = document.getElementById('lesson-feedback');
+    if (feedbackEl) {
+        const textEl = feedbackEl.querySelector('.feedback-text');
+        feedbackEl.classList.remove('hidden');
+        
+        if (isCorrect) {
+            textEl.innerText = "Correct!";
+            textEl.className = "feedback-text inline-block bg-white dark:bg-slate-800 px-8 py-4 rounded-2xl shadow-2xl border-b-4 border-green-500 text-green-600 font-bold text-2xl";
+            if(btnElement) btnElement.classList.add('correct');
+            this.playSound('correct');
+            this.currentLesson.score += 10;
+            setTimeout(() => this.nextLessonStep(), 1000);
+        } else {
+            textEl.innerText = "Wrong!";
+            textEl.className = "feedback-text inline-block bg-white dark:bg-slate-800 px-8 py-4 rounded-2xl shadow-2xl border-b-4 border-red-500 text-red-600 font-bold text-2xl";
+            if(btnElement) btnElement.classList.add('wrong');
+            this.playSound('wrong');
+            
+            // Auto-highlight correct answer
+            document.querySelectorAll('.lesson-option-btn').forEach(btn => {
+                // Check if button text matches OR if button image source matches correct word
+                if (btn.innerText.includes(step.data.tr) || btn.innerHTML.includes(this.getVisualURL(step.data.en))) {
+                    btn.classList.add('correct');
+                }
+            });
+            setTimeout(() => this.nextLessonStep(), 1500);
+        }
+    }
+},
 
             showPronounceResult(score, feedback) {
                 this.setPronounceStatus('result');
